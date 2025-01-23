@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface VoucherService {
 
-  Object addVoucher(VoucherDto voucherDto);
+    Object addVoucher(VoucherDto voucherDto);
 
-  List<VoucherDto> getVouchers(String userId);
+    List<VoucherDto> getVouchers(String userId);
 }

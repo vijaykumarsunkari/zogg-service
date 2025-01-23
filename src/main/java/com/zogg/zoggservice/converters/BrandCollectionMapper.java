@@ -9,12 +9,11 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface BrandCollectionMapper {
 
-  BrandCollectionMapper INSTANCE = Mappers.getMapper(BrandCollectionMapper.class);
+    BrandCollectionMapper INSTANCE = Mappers.getMapper(BrandCollectionMapper.class);
 
-  BrandDto toDto(BrandCollection brandCollection);
+    BrandDto toDto(BrandCollection brandCollection);
 
-  List<BrandDto> toDto(List<BrandCollection> brandCollections);
+    List<BrandDto> toDto(List<BrandCollection> brandCollections);
 
-  BrandCollection toCollection(BrandDto brandDto);
-
+    BrandCollection toCollection(BrandDto brandDto);
 }

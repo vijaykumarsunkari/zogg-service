@@ -2,8 +2,8 @@ package com.zogg.zoggservice.service;
 
 import com.zogg.zoggservice.dtos.UserPreferencesDTO;
 import com.zogg.zoggservice.entity.UserPreferences;
-import com.zogg.zoggservice.repository.UserPreferencesRepository;
 import com.zogg.zoggservice.exception.ResourceNotFoundException;
+import com.zogg.zoggservice.repository.UserPreferencesRepository;
 import com.zogg.zoggservice.service.interfaces.UserPreferencesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,16 +17,22 @@ public class UserPreferencesImpl implements UserPreferencesService {
     @Override
     @Transactional(readOnly = true)
     public UserPreferencesDTO getUserPreferences(Integer userId) { // Changed from Long to Integer
-        UserPreferences preferences = userPreferencesRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User preferences not found for user: " + userId));
+        UserPreferences preferences =
+                userPreferencesRepository
+                        .findByUserId(userId)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "User preferences not found for user: " + userId));
         return convertToDTO(preferences);
     }
 
     @Override
     @Transactional
-    public UserPreferencesDTO updateUserPreferences(Integer userId, UserPreferencesDTO dto) { // Changed from Long to Integer
-        UserPreferences preferences = userPreferencesRepository.findByUserId(userId)
-                .orElse(new UserPreferences());
+    public UserPreferencesDTO updateUserPreferences(
+            Integer userId, UserPreferencesDTO dto) { // Changed from Long to Integer
+        UserPreferences preferences =
+                userPreferencesRepository.findByUserId(userId).orElse(new UserPreferences());
         preferences.setUserId(userId); // Ensure userId is correctly set
         updatePreferencesFromDTO(preferences, dto);
         preferences = userPreferencesRepository.save(preferences);

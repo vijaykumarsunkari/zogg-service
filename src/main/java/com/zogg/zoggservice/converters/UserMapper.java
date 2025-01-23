@@ -9,13 +9,13 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-  UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-  UserDto toDto(User user);
+    UserDto toDto(User user);
 
-  @Mapping(target = "active", ignore = true)
-  @Mapping(target = "blacklisted", ignore = true)
-  @Mapping(target = "createdAt", ignore = true)
-  @Mapping(target = "updatedAt", ignore = true)
-  User toEntity(UserDto userDto);
+    @Mapping(target = "active", ignore = true)
+    @Mapping(target = "blacklisted", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    User toEntity(UserDto userDto);
 }

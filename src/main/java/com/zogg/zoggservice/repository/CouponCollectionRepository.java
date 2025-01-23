@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface CouponCollectionRepository extends MongoRepository<CouponCollection, Long> {
 
-  List<CouponCollection> findAllByUserId(Integer userId);
+    List<CouponCollection> findAllByUserId(Integer userId);
 }

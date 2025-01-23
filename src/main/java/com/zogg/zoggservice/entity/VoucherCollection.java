@@ -26,72 +26,68 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("voucher-collection")
 public class VoucherCollection {
 
-  @Id
-  private String id;
+    @Id private String id;
 
-  @NotNull
-  @Indexed
-  @JsonProperty("brand_id")
-  private String brandId;
+    @NotNull
+    @Indexed
+    @JsonProperty("brand_id")
+    private String brandId;
 
-  private String name;
+    private String name;
 
-  private String description;
+    private String description;
 
-  @JsonProperty("voucher_url")
-  private String voucherUrl;
+    @JsonProperty("voucher_url")
+    private String voucherUrl;
 
-  @JsonProperty("brand_website")
-  private String brandWebsite;
+    @JsonProperty("brand_website")
+    private String brandWebsite;
 
-  @JsonProperty("start_date_time")
-  private LocalDateTime startDateTime;
+    @JsonProperty("start_date_time")
+    private LocalDateTime startDateTime;
 
-  @JsonProperty("end_date_time")
-  private LocalDateTime endDateTime;
+    @JsonProperty("end_date_time")
+    private LocalDateTime endDateTime;
 
-  @JsonProperty("discount_type")
-  private DiscountTypeEnum discountType;
+    @JsonProperty("discount_type")
+    private DiscountTypeEnum discountType;
 
-  @JsonProperty("discount_value")
-  private Long discountValue;
+    @JsonProperty("discount_value")
+    private Long discountValue;
 
-  @JsonProperty("value_x")
-  private Long valueX;
+    @JsonProperty("value_x")
+    private Long valueX;
 
-  @JsonProperty("value_y")
-  private Long valueY;
+    @JsonProperty("value_y")
+    private Long valueY;
 
-  @JsonProperty("coins_to_redeem")
-  private Integer coinsToRedeem;
+    @JsonProperty("coins_to_redeem")
+    private Integer coinsToRedeem;
 
-  @JsonProperty("voucher_type")
-  private VoucherTypeEnum voucherType;
+    @JsonProperty("voucher_type")
+    private VoucherTypeEnum voucherType;
 
-  @JsonProperty("media_details")
-  private List<MediaDetails> mediaDetails;
+    @JsonProperty("media_details")
+    private List<MediaDetails> mediaDetails;
 
-  @JsonProperty("brand_description")
-  private String brandDescription;
+    @JsonProperty("brand_description")
+    private String brandDescription;
 
-  @JsonProperty("usage_limit")
-  private Long usageLimit;
+    @JsonProperty("usage_limit")
+    private Long usageLimit;
 
-  @JsonProperty("used_count")
-  private Long usedCount;
+    @JsonProperty("used_count")
+    private Long usedCount;
 
-  @Builder.Default
-  private boolean active = true;
+    @Builder.Default private boolean active = true;
 
-  @JsonProperty("terms_and_conditions")
-  private List<String> termsAndConditions;
+    @JsonProperty("terms_and_conditions")
+    private List<String> termsAndConditions;
 
-  @JsonProperty("how_to_avail")
-  private List<String> howToAvail;
+    @JsonProperty("how_to_avail")
+    private List<String> howToAvail;
 
-  @CreatedDate
-  private LocalDateTime createdAt;
+    @CreatedDate private LocalDateTime createdAt;
 
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
+    @LastModifiedDate private LocalDateTime updatedAt;
 }

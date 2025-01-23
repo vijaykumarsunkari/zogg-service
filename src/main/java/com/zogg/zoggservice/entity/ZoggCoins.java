@@ -1,13 +1,10 @@
 package com.zogg.zoggservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -27,28 +24,27 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Builder
 public class ZoggCoins {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(name = "user_id")
-  private Integer userId;
+    @Column(name = "user_id")
+    private Integer userId;
 
-  @Column(name = "coins", nullable = false)
-  private Long coins;
+    @Column(name = "coins", nullable = false)
+    private Long coins;
 
-  @Column(name = "total_earned", nullable = false)
-  private Long totalEarned;
+    @Column(name = "total_earned", nullable = false)
+    private Long totalEarned;
 
-  @Column(name = "total_spent", nullable = false)
-  private Long totalSpent;
+    @Column(name = "total_spent", nullable = false)
+    private Long totalSpent;
 
-  @CreatedDate
-  @Column(name = "created_at", nullable = false, updatable = false)
-  private LocalDateTime createdAt;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-  @LastModifiedDate
-  @Column(name = "updated_at")
-  private LocalDateTime updatedAt;
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
-

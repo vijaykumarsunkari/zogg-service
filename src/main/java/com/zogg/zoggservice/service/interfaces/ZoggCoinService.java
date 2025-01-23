@@ -5,9 +5,9 @@ import com.zogg.zoggservice.entity.ZoggCoins;
 
 public interface ZoggCoinService {
 
-  void updateCoins(ZoggCoinsRequestDto coinsRequestDto);
+    void updateCoins(ZoggCoinsRequestDto coinsRequestDto);
 
-  void creditCoins(ZoggCoinsRequestDto coinsRequestDto, ZoggCoins userCoins);
+    void creditCoins(ZoggCoinsRequestDto coinsRequestDto, ZoggCoins userCoins);
 
-  void debitCoins(ZoggCoinsRequestDto coinsRequestDto, ZoggCoins userCoins);
+    void debitCoins(ZoggCoinsRequestDto coinsRequestDto, ZoggCoins userCoins);
 }

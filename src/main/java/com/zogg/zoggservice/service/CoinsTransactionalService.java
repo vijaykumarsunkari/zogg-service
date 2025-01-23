@@ -1,6 +1,5 @@
 package com.zogg.zoggservice.service;
 
-
 import com.zogg.zoggservice.entity.ZoggCoinTransaction;
 import com.zogg.zoggservice.entity.ZoggCoins;
 import com.zogg.zoggservice.repository.ZoggCoinTransactionRepository;
@@ -12,13 +11,14 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CoinsTransactionalService {
-  private final ZoggCoinsRepository zoggCoinsRepository;
-  private final ZoggCoinTransactionRepository zoggCoinTransactionRepository;
+    private final ZoggCoinsRepository zoggCoinsRepository;
+    private final ZoggCoinTransactionRepository zoggCoinTransactionRepository;
 
-  @Transactional
-  public void saveCoinsAndTransactions(ZoggCoins zoggCoins, ZoggCoinTransaction zoggCoinTransaction){
+    @Transactional
+    public void saveCoinsAndTransactions(
+            ZoggCoins zoggCoins, ZoggCoinTransaction zoggCoinTransaction) {
 
-    zoggCoinsRepository.save(zoggCoins);
-    zoggCoinTransactionRepository.save(zoggCoinTransaction);
-  }
+        zoggCoinsRepository.save(zoggCoins);
+        zoggCoinTransactionRepository.save(zoggCoinTransaction);
+    }
 }

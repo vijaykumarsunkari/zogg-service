@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface VoucherCollectionRepository extends MongoRepository<VoucherCollection, String> {
 
-  List<VoucherCollection> findAllByActiveTrue();
+    List<VoucherCollection> findAllByActiveTrue();
 
-  List<VoucherCollection> findAllByIdNotIn(List<String> ids);
+    List<VoucherCollection> findAllByIdNotIn(List<String> ids);
 }

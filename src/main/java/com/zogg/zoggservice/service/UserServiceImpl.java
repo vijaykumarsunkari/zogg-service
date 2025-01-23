@@ -7,11 +7,10 @@ import com.zogg.zoggservice.entity.User;
 import com.zogg.zoggservice.repository.UserRepository;
 import com.zogg.zoggservice.service.interfaces.UserService;
 import com.zogg.zoggservice.utils.CommonUtils;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +18,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-
     @Override
     @Transactional
     public User updateUser(Integer userId, UpdateUserRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> CommonUtils.logAndGetException("User not found"));
+        User user =
+                userRepository
+                        .findById(userId)
+                        .orElseThrow(() -> CommonUtils.logAndGetException("User not found"));
 
         if (request.getUsername() != null && !request.getUsername().equals(user.getUsername())) {
             if (userRepository.existsByUsername(request.getUsername())) {
@@ -57,7 +57,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto fetchUser(Integer userId) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> CommonUtils.logAndGetException("User not found"));
+        User user =
+                userRepository
+                        .findById(userId)
+                        .orElseThrow(() -> CommonUtils.logAndGetException("User not found"));
         return UserMapper.INSTANCE.toDto(user);
     }
 }

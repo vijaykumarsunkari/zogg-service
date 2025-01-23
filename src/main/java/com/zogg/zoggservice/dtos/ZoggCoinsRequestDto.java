@@ -15,19 +15,18 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ZoggCoinsRequestDto {
 
-  @JsonProperty("user_id")
-  private Integer userId;
+    @JsonProperty("user_id")
+    private Integer userId;
 
-  @JsonProperty("no_of_coins")
-  private Long noOfCoins;
+    @JsonProperty("no_of_coins")
+    private Long noOfCoins;
 
-  @JsonProperty("transaction_type")
-  private TransactionType transactionType;
+    @JsonProperty("transaction_type")
+    private TransactionType transactionType;
 
-  @JsonProperty("ref_type")
-  private String refType;
+    @JsonProperty("ref_type")
+    private String refType;
 
-  @JsonProperty("ref_value")
-  private String refValue;
-
+    @JsonProperty("ref_value")
+    private String refValue;
 }

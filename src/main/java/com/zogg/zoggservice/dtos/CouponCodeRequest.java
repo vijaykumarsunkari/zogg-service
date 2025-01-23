@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Setter
 @Getter
 @NoArgsConstructor
@@ -17,12 +16,10 @@ import lombok.Setter;
 @Builder
 public class CouponCodeRequest {
 
+    @NotNull(message = "Voucher id is null")
+    @JsonProperty("voucher_id")
+    private String voucherId;
 
-  @NotNull(message = "Voucher id is null")
-  @JsonProperty("voucher_id")
-  private String voucherId;
-
-  @JsonProperty("coupon_codes")
-  private List<String> couponCodes;
-
+    @JsonProperty("coupon_codes")
+    private List<String> couponCodes;
 }

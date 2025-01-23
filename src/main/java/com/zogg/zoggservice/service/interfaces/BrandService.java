@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface BrandService {
 
-  BrandDto addBrand(BrandDto brandDto);
+    BrandDto addBrand(BrandDto brandDto);
 
-  List<BrandDto> fetchAllBrand();
+    List<BrandDto> fetchAllBrand();
 }

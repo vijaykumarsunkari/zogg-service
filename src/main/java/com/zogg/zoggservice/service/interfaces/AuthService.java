@@ -9,12 +9,11 @@ import jakarta.validation.Valid;
 
 public interface AuthService {
 
+    User register(UserDto userDto);
 
-  User register(UserDto userDto);
+    TokenResponse login(AuthRequest request);
 
-  TokenResponse login(AuthRequest request);
+    String sendOtp(String phoneNumber);
 
-  String sendOtp(String phoneNumber);
-
-  TokenResponse verifyOtp(@Valid VerifyOtpRequest request);
+    TokenResponse verifyOtp(@Valid VerifyOtpRequest request);
 }

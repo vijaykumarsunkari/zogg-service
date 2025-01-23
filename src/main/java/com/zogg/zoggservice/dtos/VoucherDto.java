@@ -23,72 +23,71 @@ import lombok.Setter;
 @Builder
 public class VoucherDto {
 
-  private String id;
+    private String id;
 
-  private String name;
+    private String name;
 
-  private String description;
+    private String description;
 
-  @JsonProperty("media_details")
-  private List<MediaDetails> mediaDetails;
+    @JsonProperty("media_details")
+    private List<MediaDetails> mediaDetails;
 
-  @JsonProperty("coins_to_redeem")
-  private Integer coinsToRedeem;
+    @JsonProperty("coins_to_redeem")
+    private Integer coinsToRedeem;
 
+    @JsonProperty("brand_name")
+    private String brandName;
 
-  @JsonProperty("brand_name")
-  private String brandName;
+    @JsonProperty("brand_website")
+    private String brandWebsite;
 
-  @JsonProperty("brand_website")
-  private String brandWebsite;
+    @JsonProperty("brand_description")
+    private String brandDescription;
 
-  @JsonProperty("brand_description")
-  private String brandDescription;
+    @JsonProperty("voucher_type")
+    private VoucherTypeEnum voucherType;
 
-  @JsonProperty("voucher_type")
-  private VoucherTypeEnum voucherType;
+    @JsonProperty("voucher_description")
+    private String voucherDescription;
 
-  @JsonProperty("voucher_description")
-  private String voucherDescription;
+    @JsonProperty("offer_price")
+    private String offerPrice;
 
-  @JsonProperty("offer_price")
-  private String offerPrice;
+    @JsonProperty("offer_type")
+    private DiscountTypeEnum offerType;
 
-  @JsonProperty("offer_type")
-  private DiscountTypeEnum offerType;
+    @JsonProperty("voucher_url")
+    private String voucherUrl;
 
-  @JsonProperty("voucher_url")
-  private String voucherUrl;
+    @JsonProperty("website_url")
+    private String websiteUrl;
 
-  @JsonProperty("website_url")
-  private String websiteUrl;
+    @JsonProperty("business_category")
+    private BusinessCategoryEnum businessCategory;
 
-  @JsonProperty("business_category")
-  private BusinessCategoryEnum businessCategory;
+    @JsonProperty("coupon_code")
+    private String couponCode;
 
-  @JsonProperty("coupon_code")
-  private String couponCode;
+    @JsonProperty("start_date")
+    private LocalDateTime startDateTime;
 
-  @JsonProperty("start_date")
-  private LocalDateTime startDateTime;
+    @JsonProperty("end_date")
+    private LocalDateTime endDateTime;
 
-  @JsonProperty("end_date")
-  private LocalDateTime endDateTime;
+    @JsonProperty("terms_and_conditions")
+    private List<String> termsAndConditions;
 
-  @JsonProperty("terms_and_conditions")
-  private List<String> termsAndConditions;
+    @JsonProperty("how_to_avail")
+    private List<String> howToAvail;
 
-  @JsonProperty("how_to_avail")
-  private List<String> howToAvail;
+    @JsonProperty("usage_limit")
+    private Long usageLimit;
 
-  @JsonProperty("usage_limit")
-  private Long usageLimit;
+    @JsonProperty("used_limit")
+    private Long usedCount;
 
-  @JsonProperty("used_limit")
-  private Long usedCount;
+    @JsonProperty("brand_id")
+    private String brandId;
 
-  @JsonProperty("brand_id")
-  private String brandId;
-
-  private boolean active = true;
+    private boolean active = true;
 }

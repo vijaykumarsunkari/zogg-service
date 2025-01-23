@@ -15,43 +15,45 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RedisConfig {
 
-  @Value("${redis.clients.host}")
-  private String redisHost;
+    @Value("${redis.clients.host}")
+    private String redisHost;
 
-  @Value("${redis.clients.password}")
-  private String redisPassword;
+    @Value("${redis.clients.password}")
+    private String redisPassword;
 
-  @Value("${redis.clients.port}")
-  private Integer redisPort;
+    @Value("${redis.clients.port}")
+    private Integer redisPort;
 
-  @Value("${redis.clients.database}")
-  private Integer redisDatabase;
+    @Value("${redis.clients.database}")
+    private Integer redisDatabase;
 
-  @Value("${redis.clients.redisPoolMaxTotal}")
-  private Integer redisPoolMaxTotal;
+    @Value("${redis.clients.redisPoolMaxTotal}")
+    private Integer redisPoolMaxTotal;
 
-  @Value("${redis.clients.redisTimeout}")
-  private Integer redisTimeout;
+    @Value("${redis.clients.redisTimeout}")
+    private Integer redisTimeout;
 
-  @Bean
-  public RedisCommands<String, String> createConnection() {
+    @Bean
+    public RedisCommands<String, String> createConnection() {
 
-    RedisCommands<String, String> syncCommands = null;
+        RedisCommands<String, String> syncCommands = null;
 
-    try {
-      RedisURI redisUri = RedisURI.Builder.redis(redisHost, redisPort)
-          .withPassword(redisPassword.toCharArray()).build();
+        try {
+            RedisURI redisUri =
+                    RedisURI.Builder.redis(redisHost, redisPort)
+                            .withPassword(redisPassword.toCharArray())
+                            .build();
 
-      RedisClient redisClient = RedisClient.create(redisUri);
+            RedisClient redisClient = RedisClient.create(redisUri);
 
-      redisClient.setDefaultTimeout(Duration.ofMillis(redisTimeout));
+            redisClient.setDefaultTimeout(Duration.ofMillis(redisTimeout));
 
-      syncCommands = redisClient.connect().sync();
+            syncCommands = redisClient.connect().sync();
 
-    } catch (Exception e) {
-      log.error("Failed to connect to Redis. Reason: {}", e.getMessage());
+        } catch (Exception e) {
+            log.error("Failed to connect to Redis. Reason: {}", e.getMessage());
+        }
+
+        return syncCommands;
     }
-
-    return syncCommands;
-  }
 }

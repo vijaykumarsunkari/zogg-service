@@ -5,7 +5,7 @@ import com.zogg.zoggservice.dtos.CouponCodeRequest;
 
 public interface CouponService {
 
-  Object addCoupons(CouponCodeRequest couponCodeRequest);
+    Object addCoupons(CouponCodeRequest couponCodeRequest);
 
-  Object redeemCoupon(CouponCodeDto couponCodeDto, String userId);
+    Object redeemCoupon(CouponCodeDto couponCodeDto, String userId);
 }

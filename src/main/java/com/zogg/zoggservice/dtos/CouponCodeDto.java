@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
@@ -19,17 +18,17 @@ import lombok.Setter;
 @Setter
 public class CouponCodeDto {
 
-  @JsonProperty("user_id")
-  private Integer userId;
+    @JsonProperty("user_id")
+    private Integer userId;
 
-  @JsonProperty("coins_used")
-  private Long coinsUsed;
+    @JsonProperty("coins_used")
+    private Long coinsUsed;
 
-  @JsonProperty("voucher_id")
-  private String voucherId;
+    @JsonProperty("voucher_id")
+    private String voucherId;
 
-  @JsonProperty("coupon_code")
-  private String couponCode;
+    @JsonProperty("coupon_code")
+    private String couponCode;
 
-  private Boolean redeemed;
+    private Boolean redeemed;
 }

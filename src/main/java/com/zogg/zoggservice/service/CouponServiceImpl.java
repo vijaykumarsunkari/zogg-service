@@ -27,48 +27,71 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CouponServiceImpl implements CouponService {
 
-  private final CouponCollectionRepository couponCollectionRepository;
-  private final MongoTemplate mongoTemplate;
-  private final ZoggCoinsRepository zoggCoinsRepository;
-  private final ZoggCoinService zoggCoinService;
+    private final CouponCollectionRepository couponCollectionRepository;
+    private final MongoTemplate mongoTemplate;
+    private final ZoggCoinsRepository zoggCoinsRepository;
+    private final ZoggCoinService zoggCoinService;
 
-  @Override
-  public Object addCoupons(CouponCodeRequest couponCodeRequest) {
-    List<CouponCollection> couponCollections = couponCodeRequest.getCouponCodes().stream().map(
-        couponCode -> CouponCollection.builder().couponCode(couponCode)
-            .createdAt(LocalDateTime.now()).voucherId(couponCodeRequest.getVoucherId())
-            .redeemed(false).build()).collect(Collectors.toList());
+    @Override
+    public Object addCoupons(CouponCodeRequest couponCodeRequest) {
+        List<CouponCollection> couponCollections =
+                couponCodeRequest.getCouponCodes().stream()
+                        .map(
+                                couponCode ->
+                                        CouponCollection.builder()
+                                                .couponCode(couponCode)
+                                                .createdAt(LocalDateTime.now())
+                                                .voucherId(couponCodeRequest.getVoucherId())
+                                                .redeemed(false)
+                                                .build())
+                        .collect(Collectors.toList());
 
-    return couponCollectionRepository.saveAll(couponCollections);
-  }
-
-  @Override
-  public Object redeemCoupon(CouponCodeDto couponCodeDto, String userId) {
-
-    ZoggCoins userCoins = zoggCoinsRepository.findByUserId(couponCodeDto.getUserId());
-
-    ZoggCoinsRequestDto zoggCoinsRequestDto = ZoggCoinsRequestDto.builder()
-        .noOfCoins(couponCodeDto.getCoinsUsed()).refType("COUPON_REDEEM")
-        .userId(couponCodeDto.getUserId()).build();
-
-    zoggCoinService.debitCoins(zoggCoinsRequestDto, userCoins);
-
-    Query query = new Query(
-        Criteria.where("voucherId").is(couponCodeDto.getVoucherId()).and("redeemed").is(false));
-
-    Update update = new Update().set("redeemed", true).set("userId", userId)
-        .currentDate("redeemedAt");
-
-    CouponCollection redeemedCoupon = mongoTemplate.findAndModify(query, update,
-        FindAndModifyOptions.options().returnNew(true), CouponCollection.class);
-
-    if (redeemedCoupon == null) {
-
-      throw CommonUtils.logAndGetException("No available coupons to redeem for this voucher.");
+        return couponCollectionRepository.saveAll(couponCollections);
     }
 
-    return CouponCodeDto.builder().coinsUsed(couponCodeDto.getCoinsUsed())
-        .userId(couponCodeDto.getUserId()).couponCode(redeemedCoupon.getCouponCode())
-        .voucherId(redeemedCoupon.getVoucherId()).redeemed(redeemedCoupon.getRedeemed()).build();
-  }
+    @Override
+    public Object redeemCoupon(CouponCodeDto couponCodeDto, String userId) {
+
+        ZoggCoins userCoins = zoggCoinsRepository.findByUserId(couponCodeDto.getUserId());
+
+        ZoggCoinsRequestDto zoggCoinsRequestDto =
+                ZoggCoinsRequestDto.builder()
+                        .noOfCoins(couponCodeDto.getCoinsUsed())
+                        .refType("COUPON_REDEEM")
+                        .userId(couponCodeDto.getUserId())
+                        .build();
+
+        zoggCoinService.debitCoins(zoggCoinsRequestDto, userCoins);
+
+        Query query =
+                new Query(
+                        Criteria.where("voucherId")
+                                .is(couponCodeDto.getVoucherId())
+                                .and("redeemed")
+                                .is(false));
+
+        Update update =
+                new Update().set("redeemed", true).set("userId", userId).currentDate("redeemedAt");
+
+        CouponCollection redeemedCoupon =
+                mongoTemplate.findAndModify(
+                        query,
+                        update,
+                        FindAndModifyOptions.options().returnNew(true),
+                        CouponCollection.class);
+
+        if (redeemedCoupon == null) {
+
+            throw CommonUtils.logAndGetException(
+                    "No available coupons to redeem for this voucher.");
+        }
+
+        return CouponCodeDto.builder()
+                .coinsUsed(couponCodeDto.getCoinsUsed())
+                .userId(couponCodeDto.getUserId())
+                .couponCode(redeemedCoupon.getCouponCode())
+                .voucherId(redeemedCoupon.getVoucherId())
+                .redeemed(redeemedCoupon.getRedeemed())
+                .build();
+    }
 }

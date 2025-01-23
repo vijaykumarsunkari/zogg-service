@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class VoucherController {
 
-  private final VoucherService voucherService;
+    private final VoucherService voucherService;
 
-  @PostMapping("")
-  public ApiResponse<?> addVoucher(@RequestBody VoucherDto voucherDto) {
+    @PostMapping("")
+    public ApiResponse<?> addVoucher(@RequestBody VoucherDto voucherDto) {
 
-    return new ApiResponse<>(voucherService.addVoucher(voucherDto));
-  }
+        return new ApiResponse<>(voucherService.addVoucher(voucherDto));
+    }
 
-  @GetMapping("")
-  public ApiResponse<?> getVouchers(@PathVariable("user_id") String userId) {
-    return new ApiResponse<>(voucherService.getVouchers(userId));
-  }
+    @GetMapping("")
+    public ApiResponse<?> getVouchers(@PathVariable("user_id") String userId) {
+        return new ApiResponse<>(voucherService.getVouchers(userId));
+    }
 }

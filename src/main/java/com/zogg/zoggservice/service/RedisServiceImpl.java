@@ -15,102 +15,108 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class RedisServiceImpl implements RedisService {
 
-  private final RedisCommands<String, String> connection;
+    private final RedisCommands<String, String> connection;
 
-  RedisServiceImpl(RedisConfig redisConfig) {
-    this.connection = redisConfig.createConnection();
-  }
-
-  @Override
-  public Boolean setWithExpiry(String key, String value, Long expiryInSecs) {
-
-    if (connection == null) {
-      return null;
+    RedisServiceImpl(RedisConfig redisConfig) {
+        this.connection = redisConfig.createConnection();
     }
 
-    try {
+    @Override
+    public Boolean setWithExpiry(String key, String value, Long expiryInSecs) {
 
-      String result = this.connection.set(key, value, SetArgs.Builder.nx().ex(expiryInSecs));
+        if (connection == null) {
+            return null;
+        }
 
-      if ("OK".equals(result)) {
-        return true;
-      } else {
-        log.warn(String.format("Key %s already exists and was not set.", key));
-      }
+        try {
 
-    } catch (Exception e) {
+            String result = this.connection.set(key, value, SetArgs.Builder.nx().ex(expiryInSecs));
 
-      throw CommonUtils.logAndGetException(
-          String.format("REDIS_FAILURE: Set failed due to error: %s", e.getMessage()), e);
+            if ("OK".equals(result)) {
+                return true;
+            } else {
+                log.warn(String.format("Key %s already exists and was not set.", key));
+            }
+
+        } catch (Exception e) {
+
+            throw CommonUtils.logAndGetException(
+                    String.format("REDIS_FAILURE: Set failed due to error: %s", e.getMessage()), e);
+        }
+
+        return false;
     }
 
-    return false;
-  }
+    @Override
+    public Optional<String> get(String key) {
 
-  @Override
-  public Optional<String> get(String key) {
+        if (connection == null) {
+            return Optional.empty();
+        }
 
-    if (connection == null) {
-      return Optional.empty();
+        try {
+
+            String cacheValue = this.connection.get(key);
+
+            if (Objects.isNull(cacheValue)) {
+                return Optional.empty();
+            }
+
+            return Optional.of(cacheValue);
+
+        } catch (Exception e) {
+
+            log.error(String.format("REDIS_FAILURE: Get failed due to error: %s", e.getMessage()));
+            return Optional.empty();
+        }
     }
 
-    try {
+    @Override
+    public Optional<String> getDel(String key) {
 
-      String cacheValue = this.connection.get(key);
+        if (connection == null) {
+            return Optional.empty();
+        }
 
-      if (Objects.isNull(cacheValue)) {
-        return Optional.empty();
-      }
+        try {
+            String cacheValue = this.connection.getdel(key);
 
-      return Optional.of(cacheValue);
+            if (Objects.isNull(cacheValue)) {
+                return Optional.empty();
+            }
 
-    } catch (Exception e) {
+            return Optional.of(cacheValue);
 
-      log.error(String.format("REDIS_FAILURE: Get failed due to error: %s", e.getMessage()));
-      return Optional.empty();
-    }
-  }
-
-  @Override
-  public Optional<String> getDel(String key) {
-
-    if (connection == null) {
-      return Optional.empty();
+        } catch (Exception e) {
+            throw CommonUtils.logAndGetException(
+                    String.format("REDIS_FAILURE: Get failed due to error: %s", e.getMessage()), e);
+        }
     }
 
-    try {
-      String cacheValue = this.connection.getdel(key);
-
-      if (Objects.isNull(cacheValue)) {
-        return Optional.empty();
-      }
-
-      return Optional.of(cacheValue);
-
-    } catch (Exception e) {
-      throw CommonUtils.logAndGetException(
-          String.format("REDIS_FAILURE: Get failed due to error: %s", e.getMessage()), e);
+    @Override
+    public void delete(String key) {
+        try {
+            this.connection.del(key);
+        } catch (Exception e) {
+            log.error(
+                    String.format(
+                            "Delete cache method failed for key: %s, due to error: %s",
+                            key, e.getMessage()));
+        }
     }
-  }
 
-  @Override
-  public void delete(String key) {
-    try {
-      this.connection.del(key);
-    } catch (Exception e) {
-      log.error(String.format("Delete cache method failed for key: %s, due to error: %s", key,
-          e.getMessage()));
+    public void releaseLocks(List<String> keys) {
+        for (String key : keys) {
+            try {
+                delete(key);
+            } catch (Exception e) {
+                throw CommonUtils.logAndGetException(
+                        String.format(
+                                "Failed to release lock for key: {}. Error: {}",
+                                key,
+                                e.getMessage()),
+                        e);
+            }
+        }
     }
-  }
-
-  public void releaseLocks(List<String> keys) {
-    for (String key : keys) {
-      try {
-        delete(key);
-      } catch (Exception e) {
-        throw CommonUtils.logAndGetException(
-            String.format("Failed to release lock for key: {}. Error: {}", key, e.getMessage()), e);
-      }
-    }
-  }
 }

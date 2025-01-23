@@ -22,33 +22,29 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("coupon-collection")
 public class CouponCollection {
 
-  @Id
-  private String id;
+    @Id private String id;
 
-  @NotNull
-  @Indexed(unique = true)
-  @JsonProperty("voucher_id")
-  private String voucherId;
+    @NotNull
+    @Indexed(unique = true)
+    @JsonProperty("voucher_id")
+    private String voucherId;
 
-  @NotNull
-  @Indexed
-  @JsonProperty("coupon_code")
-  private String couponCode;
+    @NotNull
+    @Indexed
+    @JsonProperty("coupon_code")
+    private String couponCode;
 
-  @NotNull
-  @Indexed
-  @JsonProperty("user_id")
-  private Integer userId;
+    @NotNull
+    @Indexed
+    @JsonProperty("user_id")
+    private Integer userId;
 
-  @JsonProperty("coins_used")
-  private Integer coinsUsed;
+    @JsonProperty("coins_used")
+    private Integer coinsUsed;
 
-  @Builder.Default
-  private Boolean redeemed = false;
+    @Builder.Default private Boolean redeemed = false;
 
-  @CreatedDate
-  private LocalDateTime createdAt;
+    @CreatedDate private LocalDateTime createdAt;
 
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
+    @LastModifiedDate private LocalDateTime updatedAt;
 }

@@ -25,32 +25,25 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class BrandCollection {
 
-  @Id
-  private String id;
+    @Id private String id;
 
-  @NotNull
-  @Indexed
-  private String name;
+    @NotNull @Indexed private String name;
 
-  private String description;
+    private String description;
 
-  private List<MediaDetails> mediaDetails;
+    private List<MediaDetails> mediaDetails;
 
-  @NotNull
-  @JsonProperty("website_url")
-  private String websiteUrl;
+    @NotNull
+    @JsonProperty("website_url")
+    private String websiteUrl;
 
-  @NotNull
-  @JsonProperty("business_category")
-  private BusinessCategoryEnum businessCategory;
+    @NotNull
+    @JsonProperty("business_category")
+    private BusinessCategoryEnum businessCategory;
 
-  @Builder.Default
-  @Indexed
-  private boolean active = true;
+    @Builder.Default @Indexed private boolean active = true;
 
-  @CreatedDate
-  private LocalDateTime createdAt;
+    @CreatedDate private LocalDateTime createdAt;
 
-  @LastModifiedDate
-  private LocalDateTime updatedAt;
+    @LastModifiedDate private LocalDateTime updatedAt;
 }

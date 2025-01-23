@@ -5,7 +5,6 @@ import com.zogg.zoggservice.dtos.UpdateUserRequest;
 import com.zogg.zoggservice.dtos.UserDto;
 import com.zogg.zoggservice.entity.User;
 import com.zogg.zoggservice.service.interfaces.UserService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +15,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @PutMapping("/{userId}")
-    public ApiResponse<User> updateUser(@PathVariable Integer userId,
-                                        @RequestBody UpdateUserRequest request) {
+    @PatchMapping("/{userId}")
+    public ApiResponse<User> updateUser(
+            @PathVariable Integer userId, @RequestBody UpdateUserRequest request) {
         return new ApiResponse<>(userService.updateUser(userId, request));
     }
 

@@ -7,5 +7,5 @@ import com.zogg.zoggservice.entity.User;
 public interface UserService {
     User updateUser(Integer userId, UpdateUserRequest request);
 
-  UserDto fetchUser(Integer userId);
+    UserDto fetchUser(Integer userId);
 }

@@ -20,11 +20,9 @@ public class UserPreferencesController {
 
     @PostMapping("/{userId}")
     public ResponseEntity<UserPreferencesDTO> updateUserPreferences(
-            @PathVariable Integer userId,
-            @RequestBody UserPreferencesDTO preferencesDTO) {
-        UserPreferencesDTO updatedPreferences = userPreferencesService.updateUserPreferences(userId, preferencesDTO);
+            @PathVariable Integer userId, @RequestBody UserPreferencesDTO preferencesDTO) {
+        UserPreferencesDTO updatedPreferences =
+                userPreferencesService.updateUserPreferences(userId, preferencesDTO);
         return ResponseEntity.ok(updatedPreferences);
     }
-
 }
-

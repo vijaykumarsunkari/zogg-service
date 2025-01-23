@@ -12,8 +12,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableJpaAuditing
 public class ZoggServiceApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(ZoggServiceApplication.class, args);
-  }
-
+    public static void main(String[] args) {
+        SpringApplication.run(ZoggServiceApplication.class, args);
+    }
 }

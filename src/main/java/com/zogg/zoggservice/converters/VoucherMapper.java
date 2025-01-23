@@ -9,12 +9,11 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface VoucherMapper {
 
-  VoucherMapper INSTANCE = Mappers.getMapper(VoucherMapper.class);
+    VoucherMapper INSTANCE = Mappers.getMapper(VoucherMapper.class);
 
-  VoucherDto toDto(VoucherCollection voucherCollection);
+    VoucherDto toDto(VoucherCollection voucherCollection);
 
-  List<VoucherDto> toDto(List<VoucherCollection> voucherCollection);
+    List<VoucherDto> toDto(List<VoucherCollection> voucherCollection);
 
-  VoucherCollection toCollection(VoucherDto voucherDto);
-
+    VoucherCollection toCollection(VoucherDto voucherDto);
 }

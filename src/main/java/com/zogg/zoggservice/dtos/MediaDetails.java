@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -19,14 +18,18 @@ import lombok.Setter;
 @Builder
 public class MediaDetails {
 
-  @JsonProperty("display_type")
-  private String displayType;
-  @JsonProperty("file_name")
-  private String fileName;
-  @JsonProperty("media_url")
-  private String mediaUrl;
-  @JsonProperty("media_format")
-  private String mediaFormat;
-  @JsonProperty("media_type")
-  private String mediaType;
+    @JsonProperty("display_type")
+    private String displayType;
+
+    @JsonProperty("file_name")
+    private String fileName;
+
+    @JsonProperty("media_url")
+    private String mediaUrl;
+
+    @JsonProperty("media_format")
+    private String mediaFormat;
+
+    @JsonProperty("media_type")
+    private String mediaType;
 }

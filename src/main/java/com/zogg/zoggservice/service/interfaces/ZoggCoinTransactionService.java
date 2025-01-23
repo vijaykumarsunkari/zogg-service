@@ -1,5 +1,3 @@
 package com.zogg.zoggservice.service.interfaces;
 
-public interface ZoggCoinTransactionService {
-
-}
+public interface ZoggCoinTransactionService {}

@@ -15,77 +15,78 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ZoggCoinServiceImpl implements ZoggCoinService {
 
-  private final ZoggCoinsRepository zoggCoinsRepository;
-  private final CoinsTransactionalService coinsTransactionalService;
+    private final ZoggCoinsRepository zoggCoinsRepository;
+    private final CoinsTransactionalService coinsTransactionalService;
 
-  @Override
-  public void updateCoins(ZoggCoinsRequestDto coinsRequestDto) {
-    ZoggCoins userCoins = zoggCoinsRepository.findByUserId(coinsRequestDto.getUserId());
+    @Override
+    public void updateCoins(ZoggCoinsRequestDto coinsRequestDto) {
+        ZoggCoins userCoins = zoggCoinsRepository.findByUserId(coinsRequestDto.getUserId());
 
-    if (TransactionType.CREDIT.equals(coinsRequestDto.getTransactionType())) {
+        if (TransactionType.CREDIT.equals(coinsRequestDto.getTransactionType())) {
 
-      creditCoins(coinsRequestDto, userCoins);
+            creditCoins(coinsRequestDto, userCoins);
 
-    } else if (TransactionType.DEBIT.equals(coinsRequestDto.getTransactionType())) {
+        } else if (TransactionType.DEBIT.equals(coinsRequestDto.getTransactionType())) {
 
-      debitCoins(coinsRequestDto, userCoins);
+            debitCoins(coinsRequestDto, userCoins);
 
-    } else {
+        } else {
 
-      throw CommonUtils.logAndGetException("Invalid transaction type");
-    }
-  }
-
-  @Override
-  public void creditCoins(ZoggCoinsRequestDto coinsRequestDto, ZoggCoins userCoins) {
-
-    if (userCoins == null) {
-
-      userCoins = ZoggCoins.builder()
-          .userId(coinsRequestDto.getUserId())
-          .coins(coinsRequestDto.getNoOfCoins())
-          .totalEarned(coinsRequestDto.getNoOfCoins())
-          .totalSpent(0L)
-          .build();
-    } else {
-
-      userCoins.setCoins(userCoins.getCoins() + coinsRequestDto.getNoOfCoins());
-
-      userCoins.setTotalEarned(userCoins.getTotalEarned() + coinsRequestDto.getNoOfCoins());
+            throw CommonUtils.logAndGetException("Invalid transaction type");
+        }
     }
 
-    ZoggCoinTransaction transaction = saveTransaction(coinsRequestDto, TransactionType.CREDIT);
+    @Override
+    public void creditCoins(ZoggCoinsRequestDto coinsRequestDto, ZoggCoins userCoins) {
 
-    coinsTransactionalService.saveCoinsAndTransactions(userCoins,transaction);
-  }
+        if (userCoins == null) {
 
-  @Override
-  public void debitCoins(ZoggCoinsRequestDto coinsRequestDto, ZoggCoins userCoins) {
+            userCoins =
+                    ZoggCoins.builder()
+                            .userId(coinsRequestDto.getUserId())
+                            .coins(coinsRequestDto.getNoOfCoins())
+                            .totalEarned(coinsRequestDto.getNoOfCoins())
+                            .totalSpent(0L)
+                            .build();
+        } else {
 
-    if (userCoins == null || userCoins.getCoins() < coinsRequestDto.getNoOfCoins()) {
+            userCoins.setCoins(userCoins.getCoins() + coinsRequestDto.getNoOfCoins());
 
-      throw CommonUtils.logAndGetException("Insufficient balance to redeem coins.");
+            userCoins.setTotalEarned(userCoins.getTotalEarned() + coinsRequestDto.getNoOfCoins());
+        }
+
+        ZoggCoinTransaction transaction = saveTransaction(coinsRequestDto, TransactionType.CREDIT);
+
+        coinsTransactionalService.saveCoinsAndTransactions(userCoins, transaction);
     }
 
-    userCoins.setCoins(userCoins.getCoins() - coinsRequestDto.getNoOfCoins());
+    @Override
+    public void debitCoins(ZoggCoinsRequestDto coinsRequestDto, ZoggCoins userCoins) {
 
-    userCoins.setTotalSpent(userCoins.getTotalSpent() + coinsRequestDto.getNoOfCoins());
+        if (userCoins == null || userCoins.getCoins() < coinsRequestDto.getNoOfCoins()) {
 
-    ZoggCoinTransaction transaction = saveTransaction(coinsRequestDto, TransactionType.DEBIT);
+            throw CommonUtils.logAndGetException("Insufficient balance to redeem coins.");
+        }
 
-    coinsTransactionalService.saveCoinsAndTransactions(userCoins,transaction);
-  }
+        userCoins.setCoins(userCoins.getCoins() - coinsRequestDto.getNoOfCoins());
 
-  private ZoggCoinTransaction saveTransaction(ZoggCoinsRequestDto coinsRequestDto, TransactionType transactionType) {
+        userCoins.setTotalSpent(userCoins.getTotalSpent() + coinsRequestDto.getNoOfCoins());
 
-    return ZoggCoinTransaction.builder()
-        .userId(coinsRequestDto.getUserId())
-        .transactionType(transactionType)
-        .refType(coinsRequestDto.getRefType())
-        .refValue(coinsRequestDto.getRefValue())
-        .coins(coinsRequestDto.getNoOfCoins())
-        .createdAt(LocalDateTime.now())
-        .build();
+        ZoggCoinTransaction transaction = saveTransaction(coinsRequestDto, TransactionType.DEBIT);
 
-  }
+        coinsTransactionalService.saveCoinsAndTransactions(userCoins, transaction);
+    }
+
+    private ZoggCoinTransaction saveTransaction(
+            ZoggCoinsRequestDto coinsRequestDto, TransactionType transactionType) {
+
+        return ZoggCoinTransaction.builder()
+                .userId(coinsRequestDto.getUserId())
+                .transactionType(transactionType)
+                .refType(coinsRequestDto.getRefType())
+                .refValue(coinsRequestDto.getRefValue())
+                .coins(coinsRequestDto.getNoOfCoins())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
 }

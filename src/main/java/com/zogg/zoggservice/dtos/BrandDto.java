@@ -20,18 +20,18 @@ import lombok.Setter;
 @Builder
 public class BrandDto {
 
-  private String id;
+    private String id;
 
-  private String name;
+    private String name;
 
-  private String description;
+    private String description;
 
-  @JsonProperty("media_details")
-  private List<MediaDetails> mediaDetails;
+    @JsonProperty("media_details")
+    private List<MediaDetails> mediaDetails;
 
-  @JsonProperty("website_url")
-  private String websiteUrl;
+    @JsonProperty("website_url")
+    private String websiteUrl;
 
-  @JsonProperty("business_category")
-  private BusinessCategoryEnum businessCategory;
+    @JsonProperty("business_category")
+    private BusinessCategoryEnum businessCategory;
 }

@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VerifyOtpRequest {
 
-  @JsonProperty("phone_number")
-  private String phoneNumber;
-  private String username;
-  private String otp;
+    @JsonProperty("phone_number")
+    private String phoneNumber;
+
+    private String username;
+    private String otp;
 }
