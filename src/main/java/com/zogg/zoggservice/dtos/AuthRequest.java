@@ -22,5 +22,6 @@ public class AuthRequest {
     private String phoneNumber;
 
     private String username;
+
     private String password;
 }
