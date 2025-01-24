@@ -2,7 +2,6 @@ package com.zogg.zoggservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zogg.zoggservice.dtos.MediaDetails;
-import com.zogg.zoggservice.enums.DiscountTypeEnum;
 import com.zogg.zoggservice.enums.VoucherTypeEnum;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
@@ -37,29 +36,20 @@ public class VoucherCollection {
 
     private String description;
 
+    @JsonProperty("pre_offer_description")
+    private String preOfferDescription;
+
+    @JsonProperty("full_offer_description")
+    private String fullOfferDesc;
+
     @JsonProperty("voucher_url")
     private String voucherUrl;
-
-    @JsonProperty("brand_website")
-    private String brandWebsite;
 
     @JsonProperty("start_date_time")
     private LocalDateTime startDateTime;
 
     @JsonProperty("end_date_time")
     private LocalDateTime endDateTime;
-
-    @JsonProperty("discount_type")
-    private DiscountTypeEnum discountType;
-
-    @JsonProperty("discount_value")
-    private Long discountValue;
-
-    @JsonProperty("value_x")
-    private Long valueX;
-
-    @JsonProperty("value_y")
-    private Long valueY;
 
     @JsonProperty("coins_to_redeem")
     private Integer coinsToRedeem;
@@ -69,9 +59,6 @@ public class VoucherCollection {
 
     @JsonProperty("media_details")
     private List<MediaDetails> mediaDetails;
-
-    @JsonProperty("brand_description")
-    private String brandDescription;
 
     @JsonProperty("usage_limit")
     private Long usageLimit;

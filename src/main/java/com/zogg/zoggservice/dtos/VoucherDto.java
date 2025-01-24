@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zogg.zoggservice.enums.BusinessCategoryEnum;
-import com.zogg.zoggservice.enums.DiscountTypeEnum;
 import com.zogg.zoggservice.enums.VoucherTypeEnum;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,12 +48,6 @@ public class VoucherDto {
 
     @JsonProperty("voucher_description")
     private String voucherDescription;
-
-    @JsonProperty("offer_price")
-    private String offerPrice;
-
-    @JsonProperty("offer_type")
-    private DiscountTypeEnum offerType;
 
     @JsonProperty("voucher_url")
     private String voucherUrl;
