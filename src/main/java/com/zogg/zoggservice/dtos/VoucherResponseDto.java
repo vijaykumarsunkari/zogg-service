@@ -20,7 +20,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
-public class VoucherDto {
+public class VoucherResponseDto {
 
     private String id;
 
@@ -43,6 +43,12 @@ public class VoucherDto {
     @JsonProperty("brand_description")
     private String brandDescription;
 
+    @JsonProperty("business_category")
+    private BusinessCategoryEnum businessCategory;
+
+    @JsonProperty("coupon_code")
+    private String couponCode;
+
     @JsonProperty("voucher_type")
     private VoucherTypeEnum voucherType;
 
@@ -51,15 +57,6 @@ public class VoucherDto {
 
     @JsonProperty("voucher_url")
     private String voucherUrl;
-
-    @JsonProperty("website_url")
-    private String websiteUrl;
-
-    @JsonProperty("business_category")
-    private BusinessCategoryEnum businessCategory;
-
-    @JsonProperty("coupon_code")
-    private String couponCode;
 
     @JsonProperty("start_date")
     private LocalDateTime startDateTime;
@@ -81,6 +78,8 @@ public class VoucherDto {
 
     @JsonProperty("brand_id")
     private String brandId;
+
+    @Builder.Default private boolean redeemed = false;
 
     private boolean active = true;
 }

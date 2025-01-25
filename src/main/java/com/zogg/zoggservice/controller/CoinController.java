@@ -4,7 +4,7 @@ import com.zogg.zoggservice.dtos.ApiResponse;
 import com.zogg.zoggservice.dtos.CoinRequestDto;
 import com.zogg.zoggservice.dtos.ConvertRequestDto;
 import com.zogg.zoggservice.dtos.GameCoinsUpdateRequest;
-import com.zogg.zoggservice.entity.UserWallet;
+import com.zogg.zoggservice.dtos.UserWalletDto;
 import com.zogg.zoggservice.service.interfaces.CoinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,7 @@ public class CoinController {
     private final CoinService coinService;
 
     @GetMapping("/{userId}")
-    public ApiResponse<UserWallet> getCoins(@PathVariable Integer userId) {
+    public ApiResponse<UserWalletDto> getCoins(@PathVariable Integer userId) {
         return new ApiResponse<>(coinService.getWallet(userId));
     }
 

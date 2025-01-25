@@ -52,7 +52,7 @@ public class VoucherCollection {
     private LocalDateTime endDateTime;
 
     @JsonProperty("coins_to_redeem")
-    private Integer coinsToRedeem;
+    private Long coinsToRedeem;
 
     @JsonProperty("voucher_type")
     private VoucherTypeEnum voucherType;
@@ -73,6 +73,9 @@ public class VoucherCollection {
 
     @JsonProperty("how_to_avail")
     private List<String> howToAvail;
+
+    @JsonProperty("created_by")
+    private Integer createdBy;
 
     @CreatedDate private LocalDateTime createdAt;
 

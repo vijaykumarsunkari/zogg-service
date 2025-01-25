@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/{user_id}/coupon")
+@RequestMapping("/api/v1/coupon")
 @RequiredArgsConstructor
 public class CouponController {
 
@@ -24,7 +24,7 @@ public class CouponController {
         return new ApiResponse<>(couponService.addCoupons(couponCodeRequest));
     }
 
-    @PostMapping("/redeem")
+    @PostMapping("/redeem/{user_id}")
     public ApiResponse<?> redeemCoupons(
             @PathVariable("user_id") Integer userId, @RequestBody CouponCodeDto couponCodeDto) {
 

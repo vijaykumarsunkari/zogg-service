@@ -5,12 +5,15 @@ import com.zogg.zoggservice.dtos.CouponCodeRequest;
 import com.zogg.zoggservice.entity.CouponCollection;
 import com.zogg.zoggservice.entity.Transaction;
 import com.zogg.zoggservice.entity.UserWallet;
+import com.zogg.zoggservice.entity.VoucherCollection;
 import com.zogg.zoggservice.enums.CoinTypeEnum;
 import com.zogg.zoggservice.enums.TransactionType;
 import com.zogg.zoggservice.repository.CouponCollectionRepository;
 import com.zogg.zoggservice.repository.UserRepository;
 import com.zogg.zoggservice.repository.UserWalletRepository;
+import com.zogg.zoggservice.repository.VoucherCollectionRepository;
 import com.zogg.zoggservice.service.interfaces.CouponService;
+import com.zogg.zoggservice.utils.CommonUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,10 +35,14 @@ public class CouponServiceImpl implements CouponService {
     private final MongoTemplate mongoTemplate;
     private final UserWalletRepository walletRepository;
     private final UserRepository userRepository;
-    private CoinsTransactionalService coinsTransactionalService;
+    private final CoinsTransactionalService coinsTransactionalService;
+    private final VoucherCollectionRepository voucherCollectionRepository;
 
     @Override
     public Object addCoupons(CouponCodeRequest couponCodeRequest) {
+
+        getVoucherCollection(couponCodeRequest.getVoucherId());
+
         List<CouponCollection> couponCollections =
                 couponCodeRequest.getCouponCodes().stream()
                         .map(
@@ -51,27 +58,36 @@ public class CouponServiceImpl implements CouponService {
         return couponCollectionRepository.saveAll(couponCollections);
     }
 
+    private VoucherCollection getVoucherCollection(String voucherId) {
+        return voucherCollectionRepository
+                .findById(voucherId)
+                .orElseThrow(() -> CommonUtils.logAndGetException("Voucher not found"));
+    }
+
     @Override
     public Object redeemCoupon(CouponCodeDto couponCodeDto, Integer userId) {
 
-        // Retrieve user wallet with app coins only
+        VoucherCollection voucherCollection = getVoucherCollection(couponCodeDto.getVoucherId());
+
+        if (!voucherCollection.getCoinsToRedeem().equals(couponCodeDto.getCoinsUsed())) {
+            throw CommonUtils.logAndGetException(
+                    "Coins required to redeem voucher : " + voucherCollection.getCoinsToRedeem());
+        }
+
         UserWallet userWallet =
                 walletRepository
                         .findByUser(
                                 userRepository
                                         .findById(userId)
                                         .orElseThrow(() -> new RuntimeException("User not found")))
-                        .orElseThrow(() -> new RuntimeException("Wallet not found"));
+                        .orElseThrow(() -> CommonUtils.logAndGetException("Wallet not found"));
 
-        // Check if the user has enough app coins to redeem the coupon
         if (userWallet.getZoggCoins() < couponCodeDto.getCoinsUsed()) {
             throw new RuntimeException("Insufficient app coins to redeem the coupon.");
         }
 
-        // Deduct coins from wallet
         userWallet.setZoggCoins(userWallet.getZoggCoins() - couponCodeDto.getCoinsUsed());
 
-        // Create a transaction record
         Transaction transaction =
                 Transaction.builder()
                         .user(userWallet.getUser())
@@ -82,7 +98,6 @@ public class CouponServiceImpl implements CouponService {
 
         coinsTransactionalService.saveWalletAndTransaction(userWallet, transaction);
 
-        // Redeem the coupon by updating MongoDB collection
         Query query =
                 new Query(
                         Criteria.where("voucherId")
@@ -91,7 +106,7 @@ public class CouponServiceImpl implements CouponService {
                                 .is(false));
 
         Update update =
-                new Update().set("redeemed", true).set("userId", userId).currentDate("redeemedAt");
+                new Update().set("redeemed", true).set("userId", userId).currentDate("updatedAt");
 
         CouponCollection redeemedCoupon =
                 mongoTemplate.findAndModify(
@@ -101,10 +116,10 @@ public class CouponServiceImpl implements CouponService {
                         CouponCollection.class);
 
         if (redeemedCoupon == null) {
-            throw new RuntimeException("No available coupons to redeem for this voucher.");
+            throw CommonUtils.logAndGetException(
+                    "No available coupons to redeem for this voucher.");
         }
 
-        // Return successful coupon redemption response
         return CouponCodeDto.builder()
                 .coinsUsed(couponCodeDto.getCoinsUsed())
                 .userId(userId)

@@ -1,11 +1,11 @@
 package com.zogg.zoggservice.service.interfaces;
 
-import com.zogg.zoggservice.entity.UserWallet;
+import com.zogg.zoggservice.dtos.UserWalletDto;
 import com.zogg.zoggservice.enums.CoinTypeEnum;
 
 public interface CoinService {
 
-    UserWallet getWallet(Integer userId);
+    UserWalletDto getWallet(Integer userId);
 
     void updateCoins(Integer userId, CoinTypeEnum coinType, Long amount);
 

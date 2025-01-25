@@ -1,5 +1,7 @@
 package com.zogg.zoggservice.service;
 
+import com.zogg.zoggservice.converters.UserWalletMapper;
+import com.zogg.zoggservice.dtos.UserWalletDto;
 import com.zogg.zoggservice.entity.Transaction;
 import com.zogg.zoggservice.entity.UserWallet;
 import com.zogg.zoggservice.enums.CoinTypeEnum;
@@ -21,7 +23,13 @@ public class CoinServiceImpl implements CoinService {
     private final UserRepository userRepository;
     private final CoinsTransactionalService coinsTransactionalService;
 
-    public UserWallet getWallet(Integer userId) {
+    public UserWalletDto getWallet(Integer userId) {
+
+        return UserWalletMapper.INSTANCE.toDto(getWalletInfo(userId));
+    }
+
+    public UserWallet getWalletInfo(Integer userId) {
+
         return walletRepository
                 .findByUser(
                         userRepository
@@ -32,7 +40,7 @@ public class CoinServiceImpl implements CoinService {
     }
 
     public void updateCoins(Integer userId, CoinTypeEnum coinType, Long amount) {
-        UserWallet wallet = getWallet(userId);
+        UserWallet wallet = getWalletInfo(userId);
 
         switch (coinType) {
             case ZOGG_COIN:
@@ -62,7 +70,7 @@ public class CoinServiceImpl implements CoinService {
     public void convertCoins(
             Integer userId, CoinTypeEnum fromCoin, CoinTypeEnum toCoin, Long amount) {
 
-        UserWallet wallet = getWallet(userId);
+        UserWallet wallet = getWalletInfo(userId);
 
         // Define conversion rates
         final int ZOGG_TO_GOLD_CONVERSION_RATE = 10;
@@ -115,7 +123,7 @@ public class CoinServiceImpl implements CoinService {
     @Override
     public void updateGameCoins(Integer userId, Long goldCoins, Long gems) {
 
-        UserWallet wallet = getWallet(userId);
+        UserWallet wallet = getWalletInfo(userId);
 
         List<Transaction> transactions = new ArrayList<>();
 

@@ -1,7 +1,8 @@
 package com.zogg.zoggservice.service;
 
 import com.zogg.zoggservice.converters.VoucherMapper;
-import com.zogg.zoggservice.dtos.VoucherDto;
+import com.zogg.zoggservice.dtos.VoucherRequestDto;
+import com.zogg.zoggservice.dtos.VoucherResponseDto;
 import com.zogg.zoggservice.entity.BrandCollection;
 import com.zogg.zoggservice.entity.CouponCollection;
 import com.zogg.zoggservice.entity.VoucherCollection;
@@ -12,6 +13,7 @@ import com.zogg.zoggservice.service.interfaces.VoucherService;
 import com.zogg.zoggservice.utils.CommonUtils;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -28,40 +30,53 @@ public class VoucherServiceImpl implements VoucherService {
     private final CouponCollectionRepository couponCollectionRepository;
 
     @Override
-    public Object addVoucher(VoucherDto voucherDto) {
-        BrandCollection brandCollection =
-                brandCollectionRepository.findById(voucherDto.getBrandId()).orElse(null);
+    public VoucherCollection addVoucher(VoucherRequestDto voucherRequestDto) {
 
-        if (brandCollection == null) {
-            throw CommonUtils.logAndGetException("BrandCollection not found");
-        }
+        findBrandCollectionById(voucherRequestDto.getBrandId());
 
-        VoucherCollection voucherCollection = VoucherMapper.INSTANCE.toCollection(voucherDto);
+        VoucherCollection voucherCollection =
+                VoucherMapper.INSTANCE.toCollection(voucherRequestDto);
+
         return voucherCollectionRepository.save(voucherCollection);
     }
 
+    private void findBrandCollectionById(String id) {
+
+        brandCollectionRepository
+                .findById(id)
+                .orElseThrow(() -> CommonUtils.logAndGetException("BrandCollection not found"));
+    }
+
     @Override
-    public List<VoucherDto> getVouchers(String userId) {
+    public List<VoucherResponseDto> getVouchers(Integer userId) {
 
-        List<String> redeemedVoucherIds =
-                couponCollectionRepository.findAllByUserId(Integer.parseInt(userId)).stream()
-                        .map(CouponCollection::getVoucherId)
-                        .toList();
+        Map<String, String> voucherIdToReedemedCouponMap =
+                couponCollectionRepository.findAllByUserId(userId).stream()
+                        .collect(
+                                Collectors.toMap(
+                                        CouponCollection::getVoucherId,
+                                        CouponCollection::getCouponCode));
 
-        List<VoucherCollection> availableVouchers =
-                voucherCollectionRepository.findAllByIdNotIn(redeemedVoucherIds);
+        List<VoucherCollection> allVoucher = voucherCollectionRepository.findAllByActiveTrue();
 
-        List<VoucherDto> voucherDtos = VoucherMapper.INSTANCE.toDto(availableVouchers);
+        List<VoucherResponseDto> voucherResponseDtos = VoucherMapper.INSTANCE.toDto(allVoucher);
 
         Set<String> brandIds =
-                voucherDtos.stream().map(VoucherDto::getBrandId).collect(Collectors.toSet());
+                voucherResponseDtos.stream()
+                        .map(VoucherResponseDto::getBrandId)
+                        .collect(Collectors.toSet());
 
         Map<String, BrandCollection> brandIdToBrandMap =
                 brandCollectionRepository.findAllById(brandIds).stream()
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toMap(BrandCollection::getId, brand -> brand));
 
-        voucherDtos.forEach(
+        voucherResponseDtos.forEach(
                 voucher -> {
+                    if (voucherIdToReedemedCouponMap.containsKey(voucher.getId())) {
+                        voucher.setCouponCode(voucherIdToReedemedCouponMap.get(voucher.getId()));
+                        voucher.setRedeemed(true);
+                    }
                     BrandCollection brand = brandIdToBrandMap.get(voucher.getBrandId());
                     if (brand != null) {
                         voucher.setBrandName(brand.getName());
@@ -70,6 +85,6 @@ public class VoucherServiceImpl implements VoucherService {
                     }
                 });
 
-        return voucherDtos;
+        return voucherResponseDtos;
     }
 }
