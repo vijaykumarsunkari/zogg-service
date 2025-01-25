@@ -88,6 +88,9 @@ public class User {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
+    @Column(name = "role", nullable = false)
+    private String role;
+
     @Column(name = "referral_code")
     private String referralCode;
 

@@ -27,8 +27,6 @@ public class UserDto {
 
     private String email;
 
-    private String password;
-
     @NotBlank(message = "First name is required")
     @JsonProperty("first_name")
     private String firstName;

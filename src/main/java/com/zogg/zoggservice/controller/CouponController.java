@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/{user_id}/coupon")
 @RequiredArgsConstructor
-public class couponController {
+public class CouponController {
 
     private final CouponService couponService;
 
@@ -26,7 +26,7 @@ public class couponController {
 
     @PostMapping("/redeem")
     public ApiResponse<?> redeemCoupons(
-            @PathVariable("user_id") String userId, @RequestBody CouponCodeDto couponCodeDto) {
+            @PathVariable("user_id") Integer userId, @RequestBody CouponCodeDto couponCodeDto) {
 
         return new ApiResponse<>(couponService.redeemCoupon(couponCodeDto, userId));
     }

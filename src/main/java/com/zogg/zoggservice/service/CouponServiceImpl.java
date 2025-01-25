@@ -2,14 +2,15 @@ package com.zogg.zoggservice.service;
 
 import com.zogg.zoggservice.dtos.CouponCodeDto;
 import com.zogg.zoggservice.dtos.CouponCodeRequest;
-import com.zogg.zoggservice.dtos.ZoggCoinsRequestDto;
 import com.zogg.zoggservice.entity.CouponCollection;
-import com.zogg.zoggservice.entity.ZoggCoins;
+import com.zogg.zoggservice.entity.Transaction;
+import com.zogg.zoggservice.entity.UserWallet;
+import com.zogg.zoggservice.enums.CoinTypeEnum;
+import com.zogg.zoggservice.enums.TransactionType;
 import com.zogg.zoggservice.repository.CouponCollectionRepository;
-import com.zogg.zoggservice.repository.ZoggCoinsRepository;
+import com.zogg.zoggservice.repository.UserRepository;
+import com.zogg.zoggservice.repository.UserWalletRepository;
 import com.zogg.zoggservice.service.interfaces.CouponService;
-import com.zogg.zoggservice.service.interfaces.ZoggCoinService;
-import com.zogg.zoggservice.utils.CommonUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,8 +30,9 @@ public class CouponServiceImpl implements CouponService {
 
     private final CouponCollectionRepository couponCollectionRepository;
     private final MongoTemplate mongoTemplate;
-    private final ZoggCoinsRepository zoggCoinsRepository;
-    private final ZoggCoinService zoggCoinService;
+    private final UserWalletRepository walletRepository;
+    private final UserRepository userRepository;
+    private CoinsTransactionalService coinsTransactionalService;
 
     @Override
     public Object addCoupons(CouponCodeRequest couponCodeRequest) {
@@ -50,19 +52,37 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Object redeemCoupon(CouponCodeDto couponCodeDto, String userId) {
+    public Object redeemCoupon(CouponCodeDto couponCodeDto, Integer userId) {
 
-        ZoggCoins userCoins = zoggCoinsRepository.findByUserId(couponCodeDto.getUserId());
+        // Retrieve user wallet with app coins only
+        UserWallet userWallet =
+                walletRepository
+                        .findByUser(
+                                userRepository
+                                        .findById(userId)
+                                        .orElseThrow(() -> new RuntimeException("User not found")))
+                        .orElseThrow(() -> new RuntimeException("Wallet not found"));
 
-        ZoggCoinsRequestDto zoggCoinsRequestDto =
-                ZoggCoinsRequestDto.builder()
-                        .noOfCoins(couponCodeDto.getCoinsUsed())
-                        .refType("COUPON_REDEEM")
-                        .userId(couponCodeDto.getUserId())
+        // Check if the user has enough app coins to redeem the coupon
+        if (userWallet.getZoggCoins() < couponCodeDto.getCoinsUsed()) {
+            throw new RuntimeException("Insufficient app coins to redeem the coupon.");
+        }
+
+        // Deduct coins from wallet
+        userWallet.setZoggCoins(userWallet.getZoggCoins() - couponCodeDto.getCoinsUsed());
+
+        // Create a transaction record
+        Transaction transaction =
+                Transaction.builder()
+                        .user(userWallet.getUser())
+                        .coinType(CoinTypeEnum.ZOGG_COIN)
+                        .transactionType(TransactionType.DEBIT)
+                        .amount(couponCodeDto.getCoinsUsed())
                         .build();
 
-        zoggCoinService.debitCoins(zoggCoinsRequestDto, userCoins);
+        coinsTransactionalService.saveWalletAndTransaction(userWallet, transaction);
 
+        // Redeem the coupon by updating MongoDB collection
         Query query =
                 new Query(
                         Criteria.where("voucherId")
@@ -81,14 +101,13 @@ public class CouponServiceImpl implements CouponService {
                         CouponCollection.class);
 
         if (redeemedCoupon == null) {
-
-            throw CommonUtils.logAndGetException(
-                    "No available coupons to redeem for this voucher.");
+            throw new RuntimeException("No available coupons to redeem for this voucher.");
         }
 
+        // Return successful coupon redemption response
         return CouponCodeDto.builder()
                 .coinsUsed(couponCodeDto.getCoinsUsed())
-                .userId(couponCodeDto.getUserId())
+                .userId(userId)
                 .couponCode(redeemedCoupon.getCouponCode())
                 .voucherId(redeemedCoupon.getVoucherId())
                 .redeemed(redeemedCoupon.getRedeemed())

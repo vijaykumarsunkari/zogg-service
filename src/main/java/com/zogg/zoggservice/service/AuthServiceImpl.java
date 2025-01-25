@@ -6,7 +6,9 @@ import com.zogg.zoggservice.dtos.TokenResponse;
 import com.zogg.zoggservice.dtos.UserDto;
 import com.zogg.zoggservice.dtos.VerifyOtpRequest;
 import com.zogg.zoggservice.entity.User;
+import com.zogg.zoggservice.entity.UserWallet;
 import com.zogg.zoggservice.repository.UserRepository;
+import com.zogg.zoggservice.repository.UserWalletRepository;
 import com.zogg.zoggservice.service.interfaces.AuthService;
 import com.zogg.zoggservice.service.interfaces.RedisService;
 import com.zogg.zoggservice.utils.CommonUtils;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+    private final UserWalletRepository walletRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisService redisService;
     private final JwtUtil jwtUtil;
@@ -31,17 +34,30 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User register(UserDto userDto) {
+
         validateUserInput(userDto);
 
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User user = UserMapper.INSTANCE.toEntity(userDto);
-
         user.setCreatedAt(LocalDateTime.now());
         user.setVerified(false);
 
+        user = userRepository.save(user);
+
+        // Create and save wallet with the generated user ID
+        UserWallet newWallet =
+                UserWallet.builder()
+                        .user(user)
+                        .zoggCoins(100L) // Initial bonus coins
+                        .goldCoins(0L)
+                        .gems(0L)
+                        .build();
+
+        walletRepository.save(newWallet);
+
+        // Send OTP only after successful registration
         sendOtpToUser(user.getPhoneNumber());
 
-        return userRepository.save(user);
+        return user;
     }
 
     @Override
