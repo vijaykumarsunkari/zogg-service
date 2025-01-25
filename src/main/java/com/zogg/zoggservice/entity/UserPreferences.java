@@ -15,10 +15,10 @@ import lombok.*;
 public class UserPreferences {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // Changed to Integer
+    private Integer id;
 
     @Column(name = "user_id", nullable = false)
-    private Integer userId; // Changed to Integer
+    private Integer userId;
 
     @Column(name = "preferred_categories")
     private String preferredCategories;

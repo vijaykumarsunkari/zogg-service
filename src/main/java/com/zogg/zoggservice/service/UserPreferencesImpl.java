@@ -1,5 +1,6 @@
 package com.zogg.zoggservice.service;
 
+import com.zogg.zoggservice.converters.UserPreferencesMapper;
 import com.zogg.zoggservice.dtos.UserPreferencesDTO;
 import com.zogg.zoggservice.entity.UserPreferences;
 import com.zogg.zoggservice.exception.ResourceNotFoundException;
@@ -13,10 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserPreferencesImpl implements UserPreferencesService {
     private final UserPreferencesRepository userPreferencesRepository;
+    private final UserPreferencesMapper userPreferencesMapper;
 
     @Override
     @Transactional(readOnly = true)
-    public UserPreferencesDTO getUserPreferences(Integer userId) { // Changed from Long to Integer
+    public UserPreferencesDTO getUserPreferences(Integer userId) {
         UserPreferences preferences =
                 userPreferencesRepository
                         .findByUserId(userId)
@@ -24,47 +26,65 @@ public class UserPreferencesImpl implements UserPreferencesService {
                                 () ->
                                         new ResourceNotFoundException(
                                                 "User preferences not found for user: " + userId));
-        return convertToDTO(preferences);
+        return userPreferencesMapper.toDTO(preferences);
     }
+
+    //    @Override
+    //    @Transactional
+    //    public UserPreferencesDTO updateUserPreferences(Integer userId, UserPreferencesDTO dto) {
+    //        UserPreferences preferences = userPreferencesRepository.findByUserId(userId)
+    //                .orElse(new UserPreferences());
+    //        preferences.setUserId(userId);
+    //        userPreferencesMapper.updateFromDTO(dto, preferences);
+    //        preferences = userPreferencesRepository.save(preferences);
+    //        return userPreferencesMapper.toDTO(preferences);
+    //    }
 
     @Override
     @Transactional
-    public UserPreferencesDTO updateUserPreferences(
-            Integer userId, UserPreferencesDTO dto) { // Changed from Long to Integer
+    public UserPreferencesDTO updateUserPreferences(Integer userId, UserPreferencesDTO dto) {
         UserPreferences preferences =
-                userPreferencesRepository.findByUserId(userId).orElse(new UserPreferences());
-        preferences.setUserId(userId); // Ensure userId is correctly set
-        updatePreferencesFromDTO(preferences, dto);
+                userPreferencesRepository
+                        .findByUserId(userId)
+                        .orElseGet(
+                                () -> {
+                                    UserPreferences newPreferences = new UserPreferences();
+                                    newPreferences.setUserId(userId);
+                                    return newPreferences;
+                                });
+
+        if (dto.getPreferredCategories() != null) {
+            preferences.setPreferredCategories(dto.getPreferredCategories());
+        }
+        if (dto.getPreferredBrands() != null) {
+            preferences.setPreferredBrands(dto.getPreferredBrands());
+        }
+        if (dto.getNotificationEnabled() != null) {
+            preferences.setNotificationEnabled(dto.getNotificationEnabled());
+        }
+        if (dto.getEmailNotifications() != null) {
+            preferences.setEmailNotifications(dto.getEmailNotifications());
+        }
+        if (dto.getSmsNotifications() != null) {
+            preferences.setSmsNotifications(dto.getSmsNotifications());
+        }
+        if (dto.getMaxDiscountPreference() != null) {
+            preferences.setMaxDiscountPreference(dto.getMaxDiscountPreference());
+        }
+        if (dto.getLocationBasedOffers() != null) {
+            preferences.setLocationBasedOffers(dto.getLocationBasedOffers());
+        }
+        if (dto.getPreferredDistance() != null) {
+            preferences.setPreferredDistance(dto.getPreferredDistance());
+        }
+        if (dto.getLanguagePreference() != null) {
+            preferences.setLanguagePreference(dto.getLanguagePreference());
+        }
+        if (dto.getCurrencyPreference() != null) {
+            preferences.setCurrencyPreference(dto.getCurrencyPreference());
+        }
+
         preferences = userPreferencesRepository.save(preferences);
-        return convertToDTO(preferences);
-    }
-
-    private UserPreferencesDTO convertToDTO(UserPreferences preferences) {
-        UserPreferencesDTO dto = new UserPreferencesDTO();
-        dto.setUserId(preferences.getUserId());
-        dto.setPreferredCategories(preferences.getPreferredCategories());
-        dto.setPreferredBrands(preferences.getPreferredBrands());
-        dto.setNotificationEnabled(preferences.getNotificationEnabled());
-        dto.setEmailNotifications(preferences.getEmailNotifications());
-        dto.setSmsNotifications(preferences.getSmsNotifications());
-        dto.setMaxDiscountPreference(preferences.getMaxDiscountPreference());
-        dto.setLocationBasedOffers(preferences.getLocationBasedOffers());
-        dto.setPreferredDistance(preferences.getPreferredDistance());
-        dto.setLanguagePreference(preferences.getLanguagePreference());
-        dto.setCurrencyPreference(preferences.getCurrencyPreference());
-        return dto;
-    }
-
-    private void updatePreferencesFromDTO(UserPreferences preferences, UserPreferencesDTO dto) {
-        preferences.setPreferredCategories(dto.getPreferredCategories());
-        preferences.setPreferredBrands(dto.getPreferredBrands());
-        preferences.setNotificationEnabled(dto.getNotificationEnabled());
-        preferences.setEmailNotifications(dto.getEmailNotifications());
-        preferences.setSmsNotifications(dto.getSmsNotifications());
-        preferences.setMaxDiscountPreference(dto.getMaxDiscountPreference());
-        preferences.setLocationBasedOffers(dto.getLocationBasedOffers());
-        preferences.setPreferredDistance(dto.getPreferredDistance());
-        preferences.setLanguagePreference(dto.getLanguagePreference());
-        preferences.setCurrencyPreference(dto.getCurrencyPreference());
+        return userPreferencesMapper.toDTO(preferences);
     }
 }
