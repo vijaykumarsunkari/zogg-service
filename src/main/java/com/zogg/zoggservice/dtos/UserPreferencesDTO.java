@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class UserPreferencesDTO {
+
     private Integer userId;
     private String preferredCategories;
     private String preferredBrands;
