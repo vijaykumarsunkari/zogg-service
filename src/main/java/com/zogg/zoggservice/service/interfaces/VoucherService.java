@@ -9,5 +9,9 @@ public interface VoucherService {
 
     VoucherCollection addVoucher(VoucherRequestDto voucherRequestDto);
 
+    VoucherResponseDto updateVoucher(String voucherId, VoucherRequestDto voucherRequestDto);
+
+    void deleteVoucher(String voucherId);
+
     List<VoucherResponseDto> getVouchers(Integer userId);
 }

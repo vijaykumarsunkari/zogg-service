@@ -33,13 +33,15 @@ public class UserPreferencesImpl implements UserPreferencesService {
     @Override
     @Transactional
     public UserPreferencesDTO updateUserPreferences(Integer userId, UserPreferencesDTO dto) {
-        UserPreferences preferences = userPreferencesRepository
-            .findByUserId(userId)
-            .orElseGet(() -> {
-                UserPreferences newPreferences = new UserPreferences();
-                newPreferences.setUserId(userId);
-                return newPreferences;
-            });
+        UserPreferences preferences =
+                userPreferencesRepository
+                        .findByUserId(userId)
+                        .orElseGet(
+                                () -> {
+                                    UserPreferences newPreferences = new UserPreferences();
+                                    newPreferences.setUserId(userId);
+                                    return newPreferences;
+                                });
 
         updateIfNotNull(dto.getPreferredCategories(), preferences::setPreferredCategories);
         updateIfNotNull(dto.getPreferredBrands(), preferences::setPreferredBrands);

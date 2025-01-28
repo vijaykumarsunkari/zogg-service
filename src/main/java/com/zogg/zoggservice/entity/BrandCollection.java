@@ -31,6 +31,7 @@ public class BrandCollection {
 
     private String description;
 
+    @JsonProperty("media_details")
     private List<MediaDetails> mediaDetails;
 
     @NotNull
