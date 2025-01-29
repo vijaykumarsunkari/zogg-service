@@ -19,17 +19,17 @@ public class BrandController {
         return new ApiResponse<>(brandService.addBrand(brandDto));
     }
 
-    @PutMapping("/{brandId}")
-    public ApiResponse<BrandDto> updateBrand(
-            @PathVariable String brandId, @RequestBody BrandDto brandDto) {
-        brandDto.setId(brandId);
+    @PutMapping()
+    public ApiResponse<BrandDto> updateBrand(@RequestBody BrandDto brandDto) {
+
         return new ApiResponse<>(brandService.updateBrand(brandDto));
     }
 
-    @DeleteMapping("/{brandId}")
-    public ApiResponse<Void> deleteBrand(@PathVariable String brandId) {
+    @DeleteMapping("/{brand_id}")
+    public ApiResponse<?> deleteBrand(@PathVariable("brand_id") String brandId) {
+
         brandService.deleteBrand(brandId);
-        return new ApiResponse<>(null);
+        return new ApiResponse<>("Brand deleted successfully");
     }
 
     @GetMapping("")

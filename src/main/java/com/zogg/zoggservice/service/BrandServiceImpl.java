@@ -33,6 +33,7 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public BrandDto updateBrand(BrandDto brandDto) {
+
         if (brandDto.getId() == null) {
             throw CommonUtils.logAndGetException("Brand ID is required for update");
         }
@@ -54,31 +55,37 @@ public class BrandServiceImpl implements BrandService {
 
         existingBrand.setName(
                 Objects.nonNull(brandDto.getName()) ? brandDto.getName() : existingBrand.getName());
+
         existingBrand.setDescription(
                 Objects.nonNull(brandDto.getDescription())
                         ? brandDto.getDescription()
                         : existingBrand.getDescription());
+
         existingBrand.setMediaDetails(
                 CollectionUtils.isEmpty(brandDto.getMediaDetails())
                         ? existingBrand.getMediaDetails()
                         : CommonUtils.updateMediaDetails(
                                 existingBrand.getMediaDetails(), brandDto.getMediaDetails()));
+
         existingBrand.setWebsiteUrl(
                 Objects.nonNull(brandDto.getWebsiteUrl())
                         ? brandDto.getWebsiteUrl()
                         : existingBrand.getWebsiteUrl());
+
         existingBrand.setBusinessCategory(
                 Objects.nonNull(brandDto.getBusinessCategory())
                         ? brandDto.getBusinessCategory()
                         : existingBrand.getBusinessCategory());
 
         BrandCollection savedBrand = brandCollectionRepository.save(existingBrand);
+
         return BrandCollectionMapper.INSTANCE.toDto(savedBrand);
     }
 
     @Override
     @Transactional
     public void deleteBrand(String brandId) {
+
         if (brandId == null) {
             throw CommonUtils.logAndGetException("Brand ID is required for deletion");
         }

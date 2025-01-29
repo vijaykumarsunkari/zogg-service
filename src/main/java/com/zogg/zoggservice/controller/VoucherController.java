@@ -24,9 +24,8 @@ public class VoucherController {
 
     @PutMapping("/{voucher_id}")
     public ApiResponse<VoucherResponseDto> updateVoucher(
-            @PathVariable("voucher_id") String voucherId,
             @RequestBody VoucherRequestDto voucherRequestDto) {
-        return new ApiResponse<>(voucherService.updateVoucher(voucherId, voucherRequestDto));
+        return new ApiResponse<>(voucherService.updateVoucher(voucherRequestDto));
     }
 
     @DeleteMapping("/{voucher_id}")
