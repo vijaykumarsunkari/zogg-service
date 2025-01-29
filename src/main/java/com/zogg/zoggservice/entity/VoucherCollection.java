@@ -5,6 +5,7 @@ import com.zogg.zoggservice.dtos.MediaDetails;
 import com.zogg.zoggservice.enums.VoucherTypeEnum;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -46,10 +47,10 @@ public class VoucherCollection {
     private String voucherUrl;
 
     @JsonProperty("start_date_time")
-    private LocalDateTime startDateTime;
+    private LocalDate startDateTime;
 
     @JsonProperty("end_date_time")
-    private LocalDateTime endDateTime;
+    private LocalDate endDateTime;
 
     @JsonProperty("coins_to_redeem")
     private Long coinsToRedeem;
