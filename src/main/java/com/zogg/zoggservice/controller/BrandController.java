@@ -36,4 +36,9 @@ public class BrandController {
     public ApiResponse<List<BrandDto>> getAllBrands() {
         return new ApiResponse<>(brandService.fetchAllBrand());
     }
+
+    @GetMapping("/{brand_id}")
+    public ApiResponse<BrandDto> getAllBrands(@PathVariable("brand_id") String brandId) {
+        return new ApiResponse<>(brandService.fetchBrandById(brandId));
+    }
 }

@@ -39,33 +39,52 @@ public class CoinServiceImpl implements CoinService {
                 .orElseThrow(() -> CommonUtils.logAndGetException("Wallet not found"));
     }
 
-    public void updateCoins(Integer userId, CoinTypeEnum coinType, Long amount) {
+    public void updateCoins(Integer userId, CoinTypeEnum coinType, TransactionType transactionType, Long amount) {
         UserWallet wallet = getWalletInfo(userId);
+
+        if (amount <= 0) {
+            throw CommonUtils.logAndGetException("Transaction amount must be greater than zero");
+        }
 
         switch (coinType) {
             case ZOGG_COIN:
-                wallet.setZoggCoins(wallet.getZoggCoins() + amount);
+                wallet.setZoggCoins(calculateNewBalance(wallet.getZoggCoins(), amount, transactionType, "Zogg Coins"));
                 break;
             case GOLD_COIN:
-                wallet.setGoldCoins(wallet.getGoldCoins() + amount);
+                wallet.setGoldCoins(calculateNewBalance(wallet.getGoldCoins(), amount, transactionType, "Gold Coins"));
                 break;
             case GEMS:
-                wallet.setGems(wallet.getGems() + amount);
+                wallet.setGems(calculateNewBalance(wallet.getGems(), amount, transactionType, "Gems"));
                 break;
             default:
                 throw CommonUtils.logAndGetException("Invalid coin type");
         }
 
         Transaction transaction =
-                Transaction.builder()
-                        .user(wallet.getUser())
-                        .amount(amount)
-                        .coinType(coinType)
-                        .transactionType(TransactionType.CREDIT)
-                        .build();
+            Transaction.builder()
+                .user(wallet.getUser())
+                .amount(amount)
+                .coinType(coinType)
+                .transactionType(transactionType)
+                .build();
 
         coinsTransactionalService.saveWalletAndTransaction(wallet, transaction);
     }
+
+
+    private Long calculateNewBalance(Long currentBalance, Long amount, TransactionType transactionType, String coinName) {
+        if (transactionType == TransactionType.CREDIT) {
+            return currentBalance + amount;
+        } else if (transactionType == TransactionType.DEBIT) {
+            if (currentBalance < amount) {
+                throw CommonUtils.logAndGetException("Insufficient " + coinName + " balance for debit transaction");
+            }
+            return currentBalance - amount;
+        } else {
+            throw CommonUtils.logAndGetException("Invalid transaction type");
+        }
+    }
+
 
     public void convertCoins(
             Integer userId, CoinTypeEnum fromCoin, CoinTypeEnum toCoin, Long amount) {

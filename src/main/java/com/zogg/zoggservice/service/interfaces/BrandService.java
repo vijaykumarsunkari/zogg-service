@@ -12,4 +12,6 @@ public interface BrandService {
     void deleteBrand(String brandId);
 
     List<BrandDto> fetchAllBrand();
+
+    BrandDto fetchBrandById(String brandId);
 }

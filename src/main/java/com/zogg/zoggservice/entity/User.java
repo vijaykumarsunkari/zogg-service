@@ -83,6 +83,7 @@ public class User {
     private Boolean active = true;
 
     @Column(name = "blacklist")
+    @Builder.Default
     private Boolean blacklisted = false;
 
     @Column(name = "last_login")

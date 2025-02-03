@@ -14,4 +14,6 @@ public interface VoucherService {
     void deleteVoucher(String voucherId);
 
     List<VoucherResponseDto> getVouchers(Integer userId);
+
+    VoucherResponseDto getVoucherById(String voucherId);
 }

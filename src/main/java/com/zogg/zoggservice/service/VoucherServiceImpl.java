@@ -191,4 +191,9 @@ public class VoucherServiceImpl implements VoucherService {
 
         return voucherResponseDtos;
     }
+
+    @Override
+    public VoucherResponseDto getVoucherById(String voucherId) {
+        return null;
+    }
 }

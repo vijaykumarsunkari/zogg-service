@@ -29,7 +29,7 @@ public class CoinController {
     @PostMapping("/update")
     public ApiResponse<String> updateCoins(@RequestBody CoinRequestDto request) {
 
-        coinService.updateCoins(request.getUserId(), request.getCoinType(), request.getAmount());
+        coinService.updateCoins(request.getUserId(), request.getCoinType(),request.getTransactionType(), request.getAmount());
 
         return new ApiResponse<>("Coins updated successfully");
     }

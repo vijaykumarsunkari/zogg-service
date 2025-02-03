@@ -38,4 +38,10 @@ public class VoucherController {
     public ApiResponse<?> getVouchers(@PathVariable("user_id") Integer userId) {
         return new ApiResponse<>(voucherService.getVouchers(userId));
     }
+
+    @GetMapping("/{voucher_id}")
+    public ApiResponse<?> getVouchers(
+            @PathVariable("user_id") Integer userId, @PathVariable("voucher_id") String voucherId) {
+        return new ApiResponse<>(voucherService.getVoucherById(voucherId));
+    }
 }

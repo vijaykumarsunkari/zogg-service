@@ -107,4 +107,17 @@ public class BrandServiceImpl implements BrandService {
         List<BrandCollection> brandCollections = brandCollectionRepository.findAll();
         return BrandCollectionMapper.INSTANCE.toDto(brandCollections);
     }
+
+    @Override
+    public BrandDto fetchBrandById(String brandId) {
+
+        BrandCollection brandCollection =
+                brandCollectionRepository
+                        .findById(brandId)
+                        .orElseThrow(
+                                () ->
+                                        CommonUtils.logAndGetException(
+                                                "Brand not found with ID: " + brandId));
+        return BrandCollectionMapper.INSTANCE.toDto(brandCollection);
+    }
 }

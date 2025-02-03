@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zogg.zoggservice.enums.BusinessCategoryEnum;
 import com.zogg.zoggservice.enums.VoucherTypeEnum;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +27,21 @@ public class VoucherResponseDto {
     private String name;
 
     private String description;
+
+    @JsonProperty("pre_offer_description")
+    private String preOfferDescription;
+
+    @JsonProperty("full_offer_description")
+    private String fullOfferDesc;
+
+    @JsonProperty("voucher_url")
+    private String voucherUrl;
+
+    @JsonProperty("start_date_time")
+    private LocalDate startDateTime;
+
+    @JsonProperty("end_date_time")
+    private LocalDate endDateTime;
 
     @JsonProperty("media_details")
     private List<MediaDetails> mediaDetails;
@@ -54,15 +69,6 @@ public class VoucherResponseDto {
 
     @JsonProperty("voucher_description")
     private String voucherDescription;
-
-    @JsonProperty("voucher_url")
-    private String voucherUrl;
-
-    @JsonProperty("start_date")
-    private LocalDateTime startDateTime;
-
-    @JsonProperty("end_date")
-    private LocalDateTime endDateTime;
 
     @JsonProperty("terms_and_conditions")
     private List<String> termsAndConditions;
