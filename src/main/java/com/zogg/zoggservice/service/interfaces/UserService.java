@@ -6,7 +6,7 @@ import com.zogg.zoggservice.dtos.UserDto;
 import java.util.List;
 
 public interface UserService {
-    UserDto updateUser(UpdateUserRequest request);
+    UserDto updateUser(Integer userId, UpdateUserRequest request);
 
     UserDto fetchUser(Integer userId);
 

@@ -17,13 +17,15 @@ public class UserController {
 
     private final UserService userService;
 
-    @PatchMapping("")
-    public ApiResponse<UserDto> updateUser(@RequestBody UpdateUserRequest request) {
-        return new ApiResponse<>(userService.updateUser(request));
+    @PatchMapping("/{userId}")
+    public ApiResponse<UserDto> updateUser(
+            @PathVariable Integer userId, @RequestBody UpdateUserRequest request) {
+        return new ApiResponse<>(userService.updateUser(userId, request));
     }
 
     @GetMapping("/{userId}")
     public ApiResponse<UserDto> getUser(@PathVariable Integer userId) {
+
         return new ApiResponse<>(userService.fetchUser(userId));
     }
 

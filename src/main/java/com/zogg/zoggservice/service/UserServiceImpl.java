@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto updateUser(UpdateUserRequest request) {
+    public UserDto updateUser(Integer userId, UpdateUserRequest request) {
 
         User user =
                 userRepository

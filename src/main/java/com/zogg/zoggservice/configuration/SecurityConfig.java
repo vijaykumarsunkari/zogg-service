@@ -56,6 +56,19 @@ public class SecurityConfig {
                 List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization", "Content-Type"));
+        //        configuration.setAllowedHeaders(List.of(
+        //                "Authorization",
+        //                "Content-Type",
+        //                "Origin",           // Added to support CORS requests
+        //                "Accept",          // Added to support CORS requests
+        //                "X-Requested-With" // Added to support CORS requests
+        //        ));
+        //
+        //        configuration.setExposedHeaders(Arrays.asList(
+        //                "Authorization",
+        //                "Access-Control-Allow-Origin",
+        //                "Access-Control-Allow-Credentials"
+        //        ));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
