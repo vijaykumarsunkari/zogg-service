@@ -41,12 +41,14 @@ public class UserServiceImpl implements UserService {
             if (userRepository.existsByUsername(request.getUsername())) {
                 throw CommonUtils.logAndGetException("Username already taken");
             }
+            user.setUsername(request.getUsername());
         }
 
         if (request.getEmail() != null && !request.getEmail().equals(user.getEmail())) {
             if (userRepository.existsByEmail(request.getEmail())) {
                 throw CommonUtils.logAndGetException("Email already registered");
             }
+            user.setEmail(request.getEmail());
         }
 
         user.setUsername(

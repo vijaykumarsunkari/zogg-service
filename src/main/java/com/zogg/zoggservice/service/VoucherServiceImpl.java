@@ -68,64 +68,52 @@ public class VoucherServiceImpl implements VoucherService {
                 Objects.nonNull(voucherRequestDto.getName())
                         ? voucherRequestDto.getName()
                         : existingVoucher.getName());
-
         existingVoucher.setDescription(
                 Objects.nonNull(voucherRequestDto.getDescription())
                         ? voucherRequestDto.getDescription()
                         : existingVoucher.getDescription());
-
         existingVoucher.setMediaDetails(
                 CollectionUtils.isEmpty(voucherRequestDto.getMediaDetails())
                         ? existingVoucher.getMediaDetails()
                         : CommonUtils.updateMediaDetails(
                                 existingVoucher.getMediaDetails(),
                                 voucherRequestDto.getMediaDetails()));
-
         existingVoucher.setCoinsToRedeem(
                 Objects.nonNull(voucherRequestDto.getCoinsToRedeem())
                         ? voucherRequestDto.getCoinsToRedeem()
                         : existingVoucher.getCoinsToRedeem());
-
         existingVoucher.setVoucherType(
                 Objects.nonNull(voucherRequestDto.getVoucherType())
                         ? voucherRequestDto.getVoucherType()
                         : existingVoucher.getVoucherType());
-
         existingVoucher.setVoucherUrl(
                 Objects.nonNull(voucherRequestDto.getVoucherUrl())
                         ? voucherRequestDto.getVoucherUrl()
                         : existingVoucher.getVoucherUrl());
-
         existingVoucher.setStartDateTime(
                 Objects.nonNull(voucherRequestDto.getStartDateTime())
                         ? voucherRequestDto.getStartDateTime()
                         : existingVoucher.getStartDateTime());
-
         existingVoucher.setEndDateTime(
                 Objects.nonNull(voucherRequestDto.getEndDateTime())
                         ? voucherRequestDto.getEndDateTime()
                         : existingVoucher.getEndDateTime());
-
         existingVoucher.setTermsAndConditions(
                 Objects.nonNull(voucherRequestDto.getTermsAndConditions())
                         ? voucherRequestDto.getTermsAndConditions()
                         : existingVoucher.getTermsAndConditions());
-
         existingVoucher.setHowToAvail(
                 Objects.nonNull(voucherRequestDto.getHowToAvail())
                         ? voucherRequestDto.getHowToAvail()
                         : existingVoucher.getHowToAvail());
-
         existingVoucher.setUsageLimit(
                 Objects.nonNull(voucherRequestDto.getUsageLimit())
                         ? voucherRequestDto.getUsageLimit()
                         : existingVoucher.getUsageLimit());
-
         existingVoucher.setUsedCount(
                 Objects.nonNull(voucherRequestDto.getUsedCount())
                         ? voucherRequestDto.getUsedCount()
                         : existingVoucher.getUsedCount());
-
         existingVoucher.setBrandId(
                 Objects.nonNull(voucherRequestDto.getBrandId())
                         ? voucherRequestDto.getBrandId()
@@ -148,7 +136,6 @@ public class VoucherServiceImpl implements VoucherService {
                                                 "Voucher not found with ID: " + voucherId));
 
         existingVoucher.setActive(false);
-
         voucherCollectionRepository.save(existingVoucher);
     }
 
