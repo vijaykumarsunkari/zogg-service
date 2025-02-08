@@ -48,12 +48,27 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(
                 List.of(
                         "http://localhost:3000",
-                        "https://a412-2401-4900-33b9-fb2e-95e0-5894-2ee6-e48e.ngrok-free.app")); // Specific frontend origin
+                        "https://a412-2401-4900-33b9-fb2e-95e0-5894-2ee6-e48e.ngrok-free.app",
+                        "https://95b6-2401-4900-49a9-3dbe-415e-89c6-5893-2b58.ngrok-free.app")); // Specific frontend origin
         configuration.setAllowCredentials(
                 true); // Allow credentials like cookies and authorization headers
-        configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowedMethods(
+                List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization", "Content-Type"));
+        //        configuration.setAllowedHeaders(List.of(
+        //                "Authorization",
+        //                "Content-Type",
+        //                "Origin",           // Added to support CORS requests
+        //                "Accept",          // Added to support CORS requests
+        //                "X-Requested-With" // Added to support CORS requests
+        //        ));
+        //
+        //        configuration.setExposedHeaders(Arrays.asList(
+        //                "Authorization",
+        //                "Access-Control-Allow-Origin",
+        //                "Access-Control-Allow-Credentials"
+        //        ));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

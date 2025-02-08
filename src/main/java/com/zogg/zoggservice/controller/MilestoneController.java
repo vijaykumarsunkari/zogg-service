@@ -44,9 +44,8 @@ public class MilestoneController {
 
     @PostMapping("/{user_id}/redeem")
     public ApiResponse<?> redeemMilestone(
-        @PathVariable Integer userId, @RequestParam Long milestoneId
-    ){
-        milestoneService.redeemUserMilestone(userId,milestoneId);
+            @PathVariable Integer userId, @RequestParam Long milestoneId) {
+        milestoneService.redeemUserMilestone(userId, milestoneId);
         return new ApiResponse<>("Milestone Redeemed");
     }
 }

@@ -86,6 +86,9 @@ public class User {
     @Builder.Default
     private Boolean blacklisted = false;
 
+    @Column(name = "updated_by")
+    private Integer updatedBy;
+
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
@@ -105,4 +108,7 @@ public class User {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "fcm_token")
+    private String fcmToken;
 }

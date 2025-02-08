@@ -50,7 +50,7 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
-    public VoucherResponseDto updateVoucher(VoucherRequestDto voucherRequestDto) {
+    public VoucherResponseDto updateVoucher(VoucherRequestDto voucherRequestDto, Integer userId) {
         VoucherCollection existingVoucher =
                 voucherCollectionRepository
                         .findById(voucherRequestDto.getId())
@@ -130,6 +130,7 @@ public class VoucherServiceImpl implements VoucherService {
                 Objects.nonNull(voucherRequestDto.getBrandId())
                         ? voucherRequestDto.getBrandId()
                         : existingVoucher.getBrandId());
+        existingVoucher.setUpdatedBy(userId);
 
         VoucherCollection savedVoucher = voucherCollectionRepository.save(existingVoucher);
         return VoucherMapper.INSTANCE.toDto(savedVoucher);

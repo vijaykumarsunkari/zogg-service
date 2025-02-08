@@ -178,6 +178,12 @@
       <version>74.1</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.google.firebase</groupId>
+      <artifactId>firebase-admin</artifactId>
+      <version>9.4.2</version>
+    </dependency>
+
   </dependencies>
   <description>Zone of Good Games</description>
   <developers>

@@ -69,5 +69,8 @@ public class VoucherRequestDto {
     @JsonProperty("brand_id")
     private String brandId;
 
+    @JsonProperty("updated_by")
+    private Integer updatedBy;
+
     private boolean active = true;
 }

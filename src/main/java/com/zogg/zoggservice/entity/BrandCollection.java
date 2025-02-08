@@ -44,6 +44,9 @@ public class BrandCollection {
 
     @Builder.Default @Indexed private boolean active = true;
 
+    @JsonProperty("updated_by")
+    private Integer updatedBy;
+
     @CreatedDate private LocalDateTime createdAt;
 
     @LastModifiedDate private LocalDateTime updatedAt;

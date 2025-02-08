@@ -9,7 +9,7 @@ public interface VoucherService {
 
     VoucherCollection addVoucher(VoucherRequestDto voucherRequestDto);
 
-    VoucherResponseDto updateVoucher(VoucherRequestDto voucherRequestDto);
+    VoucherResponseDto updateVoucher(VoucherRequestDto voucherRequestDto, Integer userId);
 
     void deleteVoucher(String voucherId);
 

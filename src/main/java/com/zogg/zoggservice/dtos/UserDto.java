@@ -3,8 +3,11 @@ package com.zogg.zoggservice.dtos;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.zogg.zoggservice.enums.Gender;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,4 +41,25 @@ public class UserDto {
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits")
     @JsonProperty("phone_number")
     private String phoneNumber;
+
+    @JsonProperty("profile_picture")
+    private String profilePicture;
+
+    @JsonProperty("date_of_birth")
+    private LocalDate dateOfBirth;
+
+    private Gender gender;
+    private String address;
+    private String city;
+    private String state;
+    private String country;
+
+    @JsonProperty("zip_code")
+    private String zipCode;
+
+    @JsonProperty("updated_at")
+    private LocalDateTime updatedAt;
+
+    @JsonProperty("updated_by")
+    private Integer updatedBy;
 }

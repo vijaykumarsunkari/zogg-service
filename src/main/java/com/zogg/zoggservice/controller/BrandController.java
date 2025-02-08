@@ -19,10 +19,10 @@ public class BrandController {
         return new ApiResponse<>(brandService.addBrand(brandDto));
     }
 
-    @PutMapping()
-    public ApiResponse<BrandDto> updateBrand(@RequestBody BrandDto brandDto) {
-
-        return new ApiResponse<>(brandService.updateBrand(brandDto));
+    @PutMapping("/{user_id}")
+    public ApiResponse<BrandDto> updateBrand(
+            @PathVariable("user_id") Integer userId, @RequestBody BrandDto brandDto) {
+        return new ApiResponse<>(brandService.updateBrand(brandDto, userId));
     }
 
     @DeleteMapping("/{brand_id}")
