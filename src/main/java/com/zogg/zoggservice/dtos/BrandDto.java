@@ -34,4 +34,9 @@ public class BrandDto {
 
     @JsonProperty("business_category")
     private BusinessCategoryEnum businessCategory;
+
+    @JsonProperty("updated_by")
+    private Integer updatedBy;
+
+    private boolean active = true;
 }

@@ -40,7 +40,8 @@ public class MilestoneServiceImpl implements MilestoneService {
         for (Milestone milestone : milestones) {
             UserMilestoneProgress progress =
                     progressRepository
-                            .findByUserIdAndMilestoneIdAndCompleted(userId, milestone.getId(),false)
+                            .findByUserIdAndMilestoneIdAndCompleted(
+                                    userId, milestone.getId(), false)
                             .orElse(
                                     UserMilestoneProgress.builder()
                                             .milestoneId(milestone.getId())
@@ -107,17 +108,28 @@ public class MilestoneServiceImpl implements MilestoneService {
 
     @Override
     public void redeemUserMilestone(Integer userId, Long milestoneId) {
-        UserMilestoneProgress userMilestoneProgress = progressRepository.findByUserIdAndMilestoneIdAndCompleted(userId,milestoneId,true).orElseThrow(
-            () -> CommonUtils.logAndGetException("Milestone not found or not completed")
-        );
-        Milestone milestone = milestoneRepository.findById(milestoneId).orElseThrow(
-            () -> CommonUtils.logAndGetException("Milestone not found for the given milestone id")
-        );
+        UserMilestoneProgress userMilestoneProgress =
+                progressRepository
+                        .findByUserIdAndMilestoneIdAndCompleted(userId, milestoneId, true)
+                        .orElseThrow(
+                                () ->
+                                        CommonUtils.logAndGetException(
+                                                "Milestone not found or not completed"));
+        Milestone milestone =
+                milestoneRepository
+                        .findById(milestoneId)
+                        .orElseThrow(
+                                () ->
+                                        CommonUtils.logAndGetException(
+                                                "Milestone not found for the given milestone id"));
 
         userMilestoneProgress.setRedeemed(true);
         progressRepository.save(userMilestoneProgress);
 
-
-        coinService.updateCoins(userId, CoinTypeEnum.ZOGG_COIN, TransactionType.CREDIT, Long.valueOf(milestone.getRewardCoins()));
+        coinService.updateCoins(
+                userId,
+                CoinTypeEnum.ZOGG_COIN,
+                TransactionType.CREDIT,
+                Long.valueOf(milestone.getRewardCoins()));
     }
 }

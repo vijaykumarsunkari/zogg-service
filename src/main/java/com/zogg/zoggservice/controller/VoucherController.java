@@ -22,10 +22,11 @@ public class VoucherController {
         return new ApiResponse<>(voucherService.addVoucher(voucherRequestDto));
     }
 
-    @PutMapping("/{voucher_id}")
+    @PutMapping("")
     public ApiResponse<VoucherResponseDto> updateVoucher(
+            @PathVariable("user_id") Integer userId,
             @RequestBody VoucherRequestDto voucherRequestDto) {
-        return new ApiResponse<>(voucherService.updateVoucher(voucherRequestDto));
+        return new ApiResponse<>(voucherService.updateVoucher(voucherRequestDto, userId));
     }
 
     @DeleteMapping("/{voucher_id}")

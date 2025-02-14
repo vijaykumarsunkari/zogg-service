@@ -11,11 +11,13 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
+    @Mapping(source = "updatedBy", target = "updatedBy")
     UserDto toDto(User user);
 
     @Mapping(target = "active", ignore = true)
     @Mapping(target = "blacklisted", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(source = "updatedBy", target = "updatedBy")
     User toEntity(UserDto userDto);
 }

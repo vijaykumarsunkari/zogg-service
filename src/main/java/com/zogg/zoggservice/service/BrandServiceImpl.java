@@ -4,6 +4,7 @@ import com.zogg.zoggservice.converters.BrandCollectionMapper;
 import com.zogg.zoggservice.dtos.BrandDto;
 import com.zogg.zoggservice.entity.BrandCollection;
 import com.zogg.zoggservice.repository.BrandCollectionRepository;
+import com.zogg.zoggservice.repository.UserRepository;
 import com.zogg.zoggservice.service.interfaces.BrandService;
 import com.zogg.zoggservice.utils.CommonUtils;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 public class BrandServiceImpl implements BrandService {
 
     private final BrandCollectionRepository brandCollectionRepository;
+    private final UserRepository userRepository;
 
     @Override
     public BrandDto addBrand(BrandDto brandDto) {
@@ -32,7 +34,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public BrandDto updateBrand(BrandDto brandDto) {
+    public BrandDto updateBrand(BrandDto brandDto, Integer userId) {
 
         if (brandDto.getId() == null) {
             throw CommonUtils.logAndGetException("Brand ID is required for update");
@@ -76,6 +78,7 @@ public class BrandServiceImpl implements BrandService {
                 Objects.nonNull(brandDto.getBusinessCategory())
                         ? brandDto.getBusinessCategory()
                         : existingBrand.getBusinessCategory());
+        existingBrand.setUpdatedBy(userId);
 
         BrandCollection savedBrand = brandCollectionRepository.save(existingBrand);
 
@@ -84,7 +87,7 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional
-    public void deleteBrand(String brandId) {
+    public BrandDto deleteBrand(String brandId) {
 
         if (brandId == null) {
             throw CommonUtils.logAndGetException("Brand ID is required for deletion");
@@ -99,7 +102,9 @@ public class BrandServiceImpl implements BrandService {
                                                 "Brand not found with ID: " + brandId));
 
         existingBrand.setActive(false);
-        brandCollectionRepository.save(existingBrand);
+        BrandCollection savedBrand = brandCollectionRepository.save(existingBrand);
+
+        return BrandCollectionMapper.INSTANCE.toDto(savedBrand);
     }
 
     @Override

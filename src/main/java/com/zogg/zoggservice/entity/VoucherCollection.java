@@ -78,6 +78,9 @@ public class VoucherCollection {
     @JsonProperty("created_by")
     private Integer createdBy;
 
+    @JsonProperty("updated_by")
+    private Integer updatedBy;
+
     @CreatedDate private LocalDateTime createdAt;
 
     @LastModifiedDate private LocalDateTime updatedAt;

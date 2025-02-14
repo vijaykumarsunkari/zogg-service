@@ -7,9 +7,9 @@ public interface BrandService {
 
     BrandDto addBrand(BrandDto brandDto);
 
-    BrandDto updateBrand(BrandDto brandDto);
+    BrandDto updateBrand(BrandDto brandDto, Integer userId);
 
-    void deleteBrand(String brandId);
+    BrandDto deleteBrand(String brandId);
 
     List<BrandDto> fetchAllBrand();
 

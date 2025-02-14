@@ -88,4 +88,7 @@ public class VoucherResponseDto {
     @Builder.Default private boolean redeemed = false;
 
     private boolean active = true;
+
+    @JsonProperty("updated_by")
+    private Integer updatedBy;
 }

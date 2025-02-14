@@ -8,7 +8,8 @@ public interface CoinService {
 
     UserWalletDto getWallet(Integer userId);
 
-    void updateCoins(Integer userId, CoinTypeEnum coinType, TransactionType transactionType, Long amount);
+    void updateCoins(
+            Integer userId, CoinTypeEnum coinType, TransactionType transactionType, Long amount);
 
     void convertCoins(Integer userId, CoinTypeEnum fromCoin, CoinTypeEnum toCoin, Long amount);
 
